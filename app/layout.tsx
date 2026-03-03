@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cinzel, Nunito } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Navbar } from "@/components/layout/Navbar";
@@ -7,17 +7,9 @@ import { Footer } from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 
-// Headings & highlights — reuses --font-playfair so all font-serif classes work unchanged
-const cinzel = Cinzel({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
-
-// Body text — reuses --font-geist-sans so --font-sans in @theme inline resolves correctly
+// Single font for both body and headings
 const nunito = Nunito({
-  variable: "--font-geist-sans",
+  variable: "--font-nunito",
   subsets: ["latin"],
   display: "swap",
   weight: ["300", "400", "500", "600", "700", "800", "900"],
@@ -110,7 +102,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${nunito.variable}`}
+      className={nunito.variable}
       suppressHydrationWarning
     >
       <body className="antialiased min-h-screen flex flex-col">
