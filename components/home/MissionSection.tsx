@@ -17,55 +17,46 @@ const objectives = [
     title: "Social & Community Projects",
     description:
       "Engaging in infrastructure development and community improvement projects that enhance the quality of life in Nomeh.",
-    color: "text-blue-500",
-    bg: "bg-blue-50 dark:bg-blue-950/40",
   },
   {
     icon: GraduationCapIcon,
     title: "Welfare & Empowerment",
     description:
       "Providing empowerment programmes, scholarships, and skill acquisition training to uplift community members.",
-    color: "text-purple-500",
-    bg: "bg-purple-50 dark:bg-purple-950/40",
   },
   {
     icon: HeartIcon,
     title: "Charitable Activities",
     description:
       "Rendering compassionate assistance to the needy, less privileged, and vulnerable within and beyond Nomeh.",
-    color: "text-rose-500",
-    bg: "bg-rose-50 dark:bg-rose-950/40",
   },
   {
     icon: HandshakeIcon,
     title: "Brotherhood & Unity",
     description:
       "Maintaining and nurturing a spirit of brotherhood, patriotism, love, and cooperation among all members.",
-    color: "text-gold",
-    bg: "bg-amber-50 dark:bg-amber-950/40",
   },
   {
     icon: ShieldIcon,
     title: "Rights & Advocacy",
     description:
       "Defending and protecting the rights and interests of the age grade and its members wherever they are domiciled.",
-    color: "text-green-light",
-    bg: "bg-green-50 dark:bg-green-950/40",
   },
   {
     icon: SparklesIcon,
     title: "Peace & Progress",
     description:
       "Contributing to peace, unity, and progress of members, their families, and the broader Nomeh community.",
-    color: "text-teal-500",
-    bg: "bg-teal-50 dark:bg-teal-950/40",
   },
 ];
 
 export function MissionSection() {
   return (
-    <section className="py-24 bg-muted/40 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-24 bg-muted/40 overflow-hidden">
+      {/* Igbo uli chevron pattern */}
+      <div className="absolute inset-0 pattern-uli opacity-50 pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
           <motion.div
@@ -80,7 +71,7 @@ export function MissionSection() {
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mt-3 mb-5 leading-tight">
               Driven by Purpose,
               <br />
-              <span className="text-gradient-green">United in Brotherhood</span>
+              <span className="text-gradient-gold animate-shimmer">United in Brotherhood</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-6">
               The{" "}
@@ -94,7 +85,7 @@ export function MissionSection() {
             </p>
             <p className="text-muted-foreground text-base leading-relaxed">
               From our inception, we have resolved to be governed by the highest
-              principles of integrity, compassion, and communal responsibility —
+              principles of integrity, compassion, and communal responsibility,
               contributing to the development of Nomeh Unateze and ensuring quality representation.
             </p>
             <div className="mt-8 flex items-center gap-4">
@@ -112,13 +103,15 @@ export function MissionSection() {
             variants={fadeInRight}
             className="relative"
           >
-            <div className="relative bg-primary rounded-3xl p-8 overflow-hidden">
+            <div className="relative bg-green-deep rounded-3xl p-8 overflow-hidden gradient-border-static">
               {/* Background decoration */}
-              <div className="absolute top-0 right-0 w-40 h-40 bg-white/15 rounded-full -translate-y-1/2 translate-x-1/2" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gold/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+              <div className="absolute top-0 right-0 w-48 h-48 bg-green-mid/30 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+              <div className="absolute bottom-0 left-0 w-36 h-36 bg-gold/8 rounded-full translate-y-1/2 -translate-x-1/2 blur-xl" />
+              {/* Top gold rule */}
+              <div className="absolute top-0 inset-x-8 h-px bg-linear-to-r from-transparent via-gold/40 to-transparent" />
 
               <div className="relative z-10">
-                <p className="text-sm font-bold tracking-[0.25em]  uppercase mb-3 text-white/70">
+                <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-3 text-gold/60">
                   Our Constitution
                 </p>
                 <h3 className="font-serif text-2xl font-bold text-white mb-6">
@@ -129,14 +122,16 @@ export function MissionSection() {
                     "Engage in social and charitable works",
                     "Empower youth and underemployed adults",
                     "Encourage entrepreneurship and skill acquisition",
-                    "Eradicate poverty, idleness and crime",
+                  
                     "Leverage community developmental processes",
                   ].map((principle, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-gold/20 border border-white/70 flex items-center justify-center shrink-0 mt-0.5">
-                        <span className="text-xs font-medium text-white/70">{i + 1}</span>
+                    <div key={i} className="flex items-start gap-3 group">
+                      <div className="w-6 h-6 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-gold/25 transition-colors duration-200">
+                        <span className="text-[11px] font-bold text-gold/80">{i + 1}</span>
                       </div>
-                      <p className="text-sm text-white/80 leading-relaxed">{principle}</p>
+                      <p className="text-sm text-white/75 leading-relaxed group-hover:text-white/90 transition-colors duration-200">
+                        {principle}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -145,7 +140,7 @@ export function MissionSection() {
           </motion.div>
         </div>
 
-        {/* Objectives grid */}
+        {/* Objectives header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -159,6 +154,7 @@ export function MissionSection() {
           <div className="w-12 h-0.5 bg-gold mx-auto mt-3 rounded-full" />
         </motion.div>
 
+        {/* Objectives grid */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
@@ -166,17 +162,30 @@ export function MissionSection() {
           viewport={{ once: true, margin: "-80px" }}
           className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
         >
-          {objectives.map((obj) => (
+          {objectives.map((obj, i) => (
             <motion.div
               key={obj.title}
               variants={fadeInUp}
-              className="group bg-card rounded-2xl border border-border p-6 hover:border-primary/25 hover:shadow-lg transition-all duration-300"
+              className="group relative bg-card rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
-              <div className={`inline-flex p-3 rounded-xl ${obj.bg} mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                <obj.icon className={`size-5 ${obj.color}`} />
+              {/* Hover background glow */}
+              <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-primary/4 via-transparent to-gold/3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+              {/* Icon — lantern style with gold hover */}
+              <div className="relative inline-flex p-3 rounded-xl bg-primary/8 border border-primary/15 mb-4 group-hover:bg-gold/8 group-hover:border-gold/40 group-hover:scale-110 transition-all duration-300">
+                <obj.icon className="size-5 text-primary group-hover:text-gold transition-colors duration-300" />
               </div>
-              <h4 className="font-semibold text-foreground mb-2">{obj.title}</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">{obj.description}</p>
+
+              {/* Number watermark */}
+              <span className="absolute top-4 right-5 text-6xl font-black text-primary/5 select-none leading-none">
+                {i + 1}
+              </span>
+
+              <h4 className="relative font-semibold text-foreground mb-2">{obj.title}</h4>
+              <p className="relative text-sm text-muted-foreground leading-relaxed">{obj.description}</p>
+
+              {/* Bottom accent */}
+              <div className="absolute bottom-0 inset-x-6 h-px bg-linear-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/30 transition-all duration-500" />
             </motion.div>
           ))}
         </motion.div>

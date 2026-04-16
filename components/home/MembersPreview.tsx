@@ -1,11 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { ArrowRightIcon, BriefcaseIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { members } from "@/lib/data/members";
 import { fadeInUp } from "@/lib/animations";
 
@@ -46,32 +45,40 @@ export function MembersPreview() {
         </motion.div>
       </div>
 
-      {/* Row 1 — drifts left */}
-      <div className="mb-4">
-        <motion.div
-          className="flex gap-4"
-          style={{ width: "max-content" }}
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+      {/* Row 1 — drifts left, pauses on hover; fade masks on edges */}
+      <div
+        className="mb-4 group/row1"
+        style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}
+      >
+        <div
+          className="flex gap-4 group-hover/row1:[animation-play-state:paused]"
+          style={{
+            width: "max-content",
+            animation: "scroll-left 45s linear infinite",
+          }}
         >
           {row1.map((member, idx) => (
             <MemberCard key={`r1-${idx}`} member={member} />
           ))}
-        </motion.div>
+        </div>
       </div>
 
-      {/* Row 2 — drifts right */}
-      <div className="mb-14">
-        <motion.div
-          className="flex gap-4"
-          style={{ width: "max-content" }}
-          animate={{ x: ["-50%", "0%"] }}
-          transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
+      {/* Row 2 — drifts right, pauses on hover */}
+      <div
+        className="mb-14 group/row2"
+        style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}
+      >
+        <div
+          className="flex gap-4 group-hover/row2:[animation-play-state:paused]"
+          style={{
+            width: "max-content",
+            animation: "scroll-right 55s linear infinite",
+          }}
         >
           {row2.map((member, idx) => (
             <MemberCard key={`r2-${idx}`} member={member} />
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Bottom CTA */}
@@ -100,7 +107,10 @@ export function MembersPreview() {
 
 function MemberCard({ member }: { member: (typeof members)[0] }) {
   return (
-    <div className="w-52 shrink-0 rounded-2xl overflow-hidden border border-border bg-card group cursor-default">
+    <Link
+      href="/members"
+      className="w-52 shrink-0 rounded-2xl overflow-hidden border border-border bg-card group cursor-pointer block ring-1 ring-transparent hover:ring-gold/50 transition-all duration-300 hover:border-gold/40"
+    >
       <div className="relative h-64 overflow-hidden">
         <Image
           src={member.photo}
@@ -109,22 +119,27 @@ function MemberCard({ member }: { member: (typeof members)[0] }) {
           className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
           sizes="208px"
         />
+        {/* Gradient overlay — always visible */}
         <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
-        {member.isExco && (
-          <div className="absolute top-2 right-2">
-            <Badge variant="gold" className="text-[9px] font-bold px-1.5">EXCO</Badge>
-          </div>
-        )}
-        <div className="absolute bottom-0 left-0 right-0 p-3">
+
+        {/* Static name (hidden on hover) */}
+        <div className="absolute bottom-0 left-0 right-0 p-3 transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-2">
           <p className="font-serif font-bold text-white text-sm leading-snug">
             {member.title} {member.name}
           </p>
-          <div className="flex items-center gap-1 mt-1">
-            <BriefcaseIcon className="size-3 text-white/50 shrink-0" />
-            <p className="text-white/60 text-[11px] truncate">{member.occupation}</p>
+          <p className="text-white/60 text-[11px] truncate mt-0.5">{member.position}</p>
+        </div>
+
+        {/* Glassmorphism hover panel — slides up */}
+        <div className="absolute inset-x-0 bottom-0 h-0 group-hover:h-18 transition-all duration-500 overflow-hidden">
+          <div className="absolute inset-0 glass border-t border-white/12 flex flex-col justify-center px-3 py-2">
+            <p className="font-serif font-bold text-white text-sm truncate leading-tight">
+              {member.title} {member.name}
+            </p>
+            <p className="text-gold/80 text-[11px] truncate mt-0.5">{member.position}</p>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

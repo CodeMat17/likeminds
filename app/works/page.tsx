@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "next/image"; // still used in work cards
 import { motion, AnimatePresence } from "framer-motion";
 import { CalendarIcon, UsersIcon, ArrowRightIcon, SearchIcon, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Emblem } from "@/components/ui/Emblem";
 import { works, categoryConfig, type WorkCategory } from "@/lib/data/works";
 import { staggerContainer, fadeInUp, scaleIn } from "@/lib/animations";
+import { cn } from "@/lib/utils";
 
 const categories: { value: "all" | WorkCategory; label: string }[] = [
   { value: "all", label: "All Projects" },
@@ -39,9 +40,18 @@ export default function WorksPage() {
 
   return (
     <div className="pt-16">
-      {/* Hero */}
-      <section className="relative py-24 bg-primary overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,oklch(0.52_0.1_155)_0%,transparent_60%)]" />
+      {/* Hero — differentiated with green-deep + diamond pattern */}
+      <section className="relative py-24 bg-green-deep overflow-hidden noise">
+        <div className="absolute inset-0 pattern-diamond pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,oklch(0.36_0.17_152/50%)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,oklch(0.74_0.17_72/8%)_0%,transparent_60%)]" />
+        {/* Animated gold rule */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute bottom-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/60 to-transparent origin-center"
+        />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <motion.div
             variants={staggerContainer}
@@ -50,10 +60,7 @@ export default function WorksPage() {
             className="flex flex-col items-center gap-4"
           >
             <motion.div variants={scaleIn}>
-              <Image alt='logo' width={100} height={100} src='/logo.webp' className="object-cover" />
-            </motion.div>
-            <motion.div variants={fadeInUp}>
-              
+              <Emblem size={90} className="text-gold" />
             </motion.div>
             <motion.h1 variants={fadeInUp} className="font-serif text-4xl sm:text-5xl font-bold text-white">
               Our Works in Nomeh
@@ -62,8 +69,6 @@ export default function WorksPage() {
               Every project is a promise kept — to our community, to the next generation,
               and to the spirit of <em className="text-gold font-semibold">Ofu Obi Umunwanne</em>.
             </motion.p>
-            {/* Impact summary */}
-         
           </motion.div>
         </div>
       </section>
@@ -95,15 +100,18 @@ export default function WorksPage() {
           </div>
           <div className="flex gap-2 flex-wrap">
             {categories.map((cat) => (
-              <Button
+              <button
                 key={cat.value}
-                variant={activeCategory === cat.value ? "default" : "outline"}
-                size="sm"
                 onClick={() => setActiveCategory(cat.value)}
-                className={activeCategory === cat.value ? "bg-primary text-primary-foreground" : "text-xs"}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 border",
+                  activeCategory === cat.value
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                    : "bg-muted hover:bg-muted/80 text-muted-foreground border-transparent hover:border-border"
+                )}
               >
                 {cat.label}
-              </Button>
+              </button>
             ))}
           </div>
         </div>

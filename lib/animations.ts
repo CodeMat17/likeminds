@@ -118,3 +118,41 @@ export const slideInRight: Variants = {
     transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
   },
 };
+
+// Digit-flip: for AnimatePresence-based counter animation
+export const digitFlip: Variants = {
+  initial: { rotateX: -90, opacity: 0, y: -20 },
+  animate: {
+    rotateX: 0,
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: {
+    rotateX: 90,
+    opacity: 0,
+    y: 20,
+    transition: { duration: 0.2, ease: "easeIn" },
+  },
+};
+
+// Timeline item: slides in from left (for about page objectives)
+export const timelineItem: Variants = {
+  hidden: { opacity: 0, x: -24 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+// 3D tilt card entrance
+export const tiltReveal: Variants = {
+  hidden: { opacity: 0, scale: 0.9, rotateY: -10 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    rotateY: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};

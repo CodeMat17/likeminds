@@ -41,7 +41,7 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <HeroSection />
-      {/* <StatsSection /> */}
+      <StatsSection />
       <MissionSection />
       <WorksPreview />
       <MembersPreview />

@@ -17,29 +17,26 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Emblem } from "@/components/ui/Emblem";
 import { Separator } from "@/components/ui/separator";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
-import Image from "next/image";
+import { Emblem } from "@/components/ui/Emblem";
 
 // ─── Schema ─────────────────────────────────────────────
 const schema = z.object({
   // Step 1 – Personal
-  firstName:   z.string().min(2, "First name must be at least 2 characters"),
-  lastName:    z.string().min(2, "Last name must be at least 2 characters"),
-  otherNames:  z.string().optional(),
+  fullName:    z.string().min(2, "Full name must be at least 2 characters"),
   dateOfBirth: z
     .date({ error: "Please select your date of birth" })
     .refine(
       (d) => d.getFullYear() >= 1980 && d.getFullYear() <= 1986,
       "You must be born between 1980 and 1986"
     ),
-  fathersName: z.string().min(2, "Father's name is required"),
-  mothersName: z.string().min(2, "Mother's name is required"),
-  familyName:  z.string().min(2, "Family / Umunna name is required"),
+  fathersName:     z.string().min(2, "Father's name is required"),
+  familyName:      z.string().min(2, "Family / Umunna name is required"),
+  quartersInNomeh: z.string().min(2, "Quarters in Nomeh is required"),
 
   // Step 2 – Contact & Work
   phone:               z.string().min(7, "Phone number is required"),
@@ -65,6 +62,44 @@ const steps = [
   { id: 3, title: "Declaration",       icon: HeartHandshakeIcon, description: "Eligibility confirmation and pledge" },
 ];
 
+// ─── DatePicker ─────────────────────────────────────────
+function DatePicker({ value, onChange }: { value: Date; onChange: (d: Date | undefined) => void }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          className={cn(
+            "w-full justify-start text-left font-normal",
+            !value && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon className="mr-2 size-4" />
+          {value
+            ? value.toLocaleDateString("en-NG", { day: "numeric", month: "long", year: "numeric" })
+            : "Select your date of birth"}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={value}
+          onSelect={(date) => { onChange(date); setOpen(false); }}
+          captionLayout="dropdown"
+          defaultMonth={new Date(1983, 0)}
+          fromYear={1980}
+          toYear={1986}
+          disabled={(date) =>
+            date < new Date(1980, 0, 1) || date > new Date(1986, 11, 31)
+          }
+        />
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 // ─── Step 1 ─────────────────────────────────────────────
 function Step1({ control, register, errors }: {
   control: Control<FormData>;
@@ -75,22 +110,10 @@ function Step1({ control, register, errors }: {
 }) {
   return (
     <div className="space-y-5">
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First Name <span className="text-destructive">*</span></Label>
-          <Input id="firstName" placeholder="e.g. Chukwuemeka" {...register("firstName")} />
-          {errors.firstName && <p className="text-xs text-destructive">{errors.firstName.message}</p>}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name <span className="text-destructive">*</span></Label>
-          <Input id="lastName" placeholder="e.g. Okafor" {...register("lastName")} />
-          {errors.lastName && <p className="text-xs text-destructive">{errors.lastName.message}</p>}
-        </div>
-      </div>
-
       <div className="space-y-2">
-        <Label htmlFor="otherNames">Other Names <span className="text-muted-foreground text-xs">(optional)</span></Label>
-        <Input id="otherNames" placeholder="e.g. Emmanuel" {...register("otherNames")} />
+        <Label htmlFor="fullName">Full Name <span className="text-destructive">*</span></Label>
+        <Input id="fullName" placeholder="e.g. Chukwuemeka Emmanuel Okafor" {...register("fullName")} />
+        {errors.fullName && <p className="text-xs text-destructive">{errors.fullName.message}</p>}
       </div>
 
       {/* Date of Birth — shadcn Calendar + Popover */}
@@ -100,58 +123,29 @@ function Step1({ control, register, errors }: {
           control={control}
           name="dateOfBirth"
           render={({ field }) => (
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !field.value && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 size-4" />
-                  {field.value
-                    ? field.value.toLocaleDateString("en-NG", { day: "numeric", month: "long", year: "numeric" })
-                    : "Select your date of birth"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={field.value}
-                  onSelect={field.onChange}
-                  defaultMonth={new Date(1983, 0)}
-                  disabled={(date) =>
-                    date < new Date(1980, 0, 1) || date > new Date(1986, 11, 31)
-                  }
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <DatePicker value={field.value} onChange={field.onChange} />
           )}
         />
         {errors.dateOfBirth && <p className="text-xs text-destructive">{errors.dateOfBirth.message}</p>}
         <p className="text-[11px] text-muted-foreground">Only dates between 1 Jan 1980 and 31 Dec 1986 are selectable.</p>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="fathersName">Father&apos;s Name <span className="text-destructive">*</span></Label>
-          <Input id="fathersName" placeholder="e.g. Ikechukwu Okafor" {...register("fathersName")} />
-          {errors.fathersName && <p className="text-xs text-destructive">{errors.fathersName.message}</p>}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="mothersName">Mother&apos;s Name <span className="text-destructive">*</span></Label>
-          <Input id="mothersName" placeholder="e.g. Ngozi Okafor" {...register("mothersName")} />
-          {errors.mothersName && <p className="text-xs text-destructive">{errors.mothersName.message}</p>}
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="fathersName">Father&apos;s Name <span className="text-destructive">*</span></Label>
+        <Input id="fathersName" placeholder="e.g. Ikechukwu Okafor" {...register("fathersName")} />
+        {errors.fathersName && <p className="text-xs text-destructive">{errors.fathersName.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="familyName">Family / Umunna Name <span className="text-destructive">*</span></Label>
         <Input id="familyName" placeholder="e.g. Umunna Ezenwachi" {...register("familyName")} />
         {errors.familyName && <p className="text-xs text-destructive">{errors.familyName.message}</p>}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="quartersInNomeh">Quarters in Nomeh <span className="text-destructive">*</span></Label>
+        <Input id="quartersInNomeh" placeholder="e.g. Ogui Quarters" {...register("quartersInNomeh")} />
+        {errors.quartersInNomeh && <p className="text-xs text-destructive">{errors.quartersInNomeh.message}</p>}
       </div>
     </div>
   );
@@ -327,7 +321,7 @@ export default function JoinPage() {
   });
 
   const stepFields: Record<number, (keyof FormData)[]> = {
-    1: ["firstName", "lastName", "dateOfBirth", "fathersName", "mothersName", "familyName"],
+    1: ["fullName", "dateOfBirth", "fathersName", "familyName", "quartersInNomeh"],
     2: ["phone", "residentialAddress", "stateOfResidence", "city", "occupation"],
     3: ["agreeIndigene", "agreeCharacter", "agreeBirthYear", "agreeConstitution", "agreeRegistrationFee"],
   };
@@ -351,38 +345,58 @@ export default function JoinPage() {
 
   if (isSubmitted) {
     return (
-      <div className='pt-16 min-h-screen bg-muted/30 flex items-center justify-center px-4'>
+      <div className="pt-16 min-h-screen bg-muted/30 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className='max-w-md w-full text-center bg-card rounded-2xl border border-border p-10 shadow-xl'>
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className='mb-3'>
-            <CheckCircle2Icon className='size-16 text-green-light mx-auto' />
-          </motion.div>
-       
-         
+          className="max-w-md w-full text-center bg-card rounded-2xl border border-border p-10 shadow-xl relative overflow-hidden"
+        >
+          {/* Staggered gold diamond confetti — deterministic positions */}
+          {[8, 18, 28, 12, 22, 32, 15, 25].map((topPct, i) => (
+            <motion.span
+              key={i}
+              className="absolute text-gold pointer-events-none select-none"
+              style={{
+                left: `${10 + i * 11}%`,
+                top: `${topPct}%`,
+                fontSize: i % 2 === 0 ? "10px" : "7px",
+                opacity: 0,
+              }}
+              animate={{ opacity: [0, 0.7, 0], y: [0, -30, -60] }}
+              transition={{ delay: 0.4 + i * 0.12, duration: 1.4, ease: "easeOut" }}
+            >
+              ◆
+            </motion.span>
+          ))}
 
-          <h2 className='font-serif text-2xl font-bold text-foreground mb-3'>
+          {/* Emblem replacing CheckCircle */}
+          <motion.div
+            initial={{ scale: 0, rotate: -30 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 180, damping: 14 }}
+            className="mb-5 flex justify-center"
+          >
+            <Emblem size={80} className="text-gold" />
+          </motion.div>
+
+          <h2 className="font-serif text-2xl font-bold text-foreground mb-3">
             Application Received!
           </h2>
-          <p className='text-muted-foreground text-sm leading-relaxed mb-6'>
+          <p className="text-muted-foreground text-sm leading-relaxed mb-5">
             Thank you for applying to join the{" "}
-            <strong className='text-foreground'>
-              LikeMinds 1980–1986 Association
-            </strong>
-            . Your application will be reviewed by the Executive Council. We
-            will contact you within 2–7 working days.
+            <strong className="text-foreground">LikeMinds 1980–1986 Association</strong>.
+            Your application will be reviewed by the Executive Council. We will
+            contact you within 2–7 working days.
           </p>
-          <p className='font-serif italic font-semibold text-lg mb-6'>
+
+          {/* Shimmer motto */}
+          <p className="text-gradient-gold animate-shimmer font-serif italic font-bold text-lg mb-6">
             &ldquo;Ofu Obi Umunwanne&rdquo;
           </p>
-          <Button asChild className='bg-primary hover:bg-primary/90 w-full'>
-            <Link href='/'>Return to Home</Link>
+
+          <Button asChild className="bg-primary hover:bg-primary/90 w-full">
+            <Link href="/">Return to Home</Link>
           </Button>
         </motion.div>
       </div>
@@ -391,16 +405,21 @@ export default function JoinPage() {
 
   return (
     <div className="pt-16 min-h-screen bg-muted/30">
-      {/* Hero */}
-      <section className="relative py-16 bg-primary overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.48_0.07_218)_0%,transparent_60%)]" />
+      {/* Hero — elevated with green-deep + uli pattern + Emblem watermark */}
+      <section className="relative py-16 bg-green-deep overflow-hidden noise">
+        <div className="absolute inset-0 pattern-uli pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.36_0.17_152/50%)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.17_72/8%)_0%,transparent_60%)]" />
+        {/* Emblem watermark */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04]">
+          <Emblem size={320} className="text-white" />
+        </div>
+        <div className="absolute bottom-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/50 to-transparent" />
+
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="flex flex-col items-center gap-4">
             <motion.div variants={fadeInUp}>
-              <Image alt="logo" width={90} height={90} src="/logo.webp" className="object-cover" />
-            </motion.div>
-            <motion.div variants={fadeInUp}>
-              <Badge variant="gold" className="text-xs tracking-widest">BECOME A MEMBER</Badge>
+              <Badge variant="gold" className="text-xs tracking-widest animate-pulse-gold">BECOME A MEMBER</Badge>
             </motion.div>
             <motion.h1 variants={fadeInUp} className="font-serif text-3xl sm:text-4xl font-bold text-white">
               Membership Application
@@ -419,10 +438,10 @@ export default function JoinPage() {
               ))}
             </motion.div>
 
-            {/* Fee */}
-            <motion.div variants={fadeInUp} className="bg-white/10 border border-white/20 rounded-xl px-6 py-3">
+            {/* Fee badge */}
+            <motion.div variants={fadeInUp} className="bg-white/10 border border-gold/40 rounded-xl px-6 py-3">
               <p className="text-white/60 text-xs">One-time Registration Fee</p>
-              <p className="text-white font-serif font-bold text-2xl mt-0.5">₦100,000</p>
+              <p className="text-gradient-gold animate-shimmer font-serif font-bold text-2xl mt-0.5">₦100,000</p>
             </motion.div>
           </motion.div>
         </div>
@@ -430,31 +449,33 @@ export default function JoinPage() {
 
       {/* Form */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-        {/* Progress steps */}
+        {/* Progress steps — gold active state */}
         <div className="mb-10">
           <div className="flex items-center justify-between relative">
             <div className="absolute top-5 left-0 right-0 h-0.5 bg-border" />
+            {/* Animated gold progress fill */}
             <motion.div
-              className="absolute top-5 left-0 h-0.5 bg-primary"
+              className="absolute top-5 left-0 h-0.5 bg-linear-to-r from-gold via-gold/80 to-gold/60 shadow-[0_0_6px_2px_oklch(0.74_0.17_72/30%)]"
               animate={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
             />
             {steps.map((step) => {
               const isComplete = currentStep > step.id;
               const isActive = currentStep === step.id;
               return (
                 <div key={step.id} className="relative z-10 flex flex-col items-center gap-2">
-                  <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                  <div className={cn(
+                    "w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300",
                     isComplete
-                      ? "bg-primary border-primary text-primary-foreground"
+                      ? "bg-green-mid border-green-mid text-white shadow-md"
                       : isActive
-                      ? "bg-background border-primary text-primary"
+                      ? "bg-gold border-gold text-green-deep shadow-[0_0_12px_4px_oklch(0.74_0.17_72/35%)]"
                       : "bg-background border-border text-muted-foreground"
-                  }`}>
+                  )}>
                     {isComplete ? <CheckCircle2Icon className="size-5" /> : <step.icon className="size-4" />}
                   </div>
                   <div className="hidden sm:flex flex-col items-center">
-                    <span className={`text-[11px] font-semibold ${isActive ? "text-primary" : isComplete ? "text-primary/60" : "text-muted-foreground"}`}>
+                    <span className={`text-[11px] font-semibold ${isActive ? "text-gold" : isComplete ? "text-primary/60" : "text-muted-foreground"}`}>
                       {step.title}
                     </span>
                   </div>

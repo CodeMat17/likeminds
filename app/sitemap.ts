@@ -38,10 +38,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...workPages,
     {
+      url: `${BASE_URL}/works/gallery`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${BASE_URL}/join`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/contact`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.7,
     },
   ];
 }

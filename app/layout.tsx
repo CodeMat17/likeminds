@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Nunito } from "next/font/google";
+import { Nunito, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Navbar } from "@/components/layout/Navbar";
@@ -7,12 +7,19 @@ import { Footer } from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 
-// Single font for both body and headings
 const nunito = Nunito({
   variable: "--font-nunito",
   subsets: ["latin"],
   display: "swap",
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
 });
 
 const baseUrl = "https://likeminds-nomeh.org";
@@ -56,9 +63,9 @@ export const metadata: Metadata = {
       "A non-profit age grade association dedicated to social development, community welfare, and empowerment in Nomeh, Enugu State, Nigeria.",
     images: [
       {
-        url: `${baseUrl}/og-image.jpg`,
-        width: 1200,
-        height: 630,
+        url: `${baseUrl}/logo.webp`,
+        width: 400,
+        height: 400,
         alt: "LikeMinds 1980–1986 Association – Ofu Obi Umunwanne",
       },
     ],
@@ -68,7 +75,7 @@ export const metadata: Metadata = {
     title: "LikeMinds 1980–1986 | Nomeh Unateze",
     description:
       "Nomeh Unateze 1980–1986 Age Grade – committed to brotherhood, community development and empowerment.",
-    images: [`${baseUrl}/og-image.jpg`],
+    images: [`${baseUrl}/logo.webp`],
   },
   robots: {
     index: true,
@@ -86,8 +93,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f9f5ef" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a1a0f" },
+    { media: "(prefers-color-scheme: light)", color: "#f8f4ec" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1a0e" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -102,15 +109,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={nunito.variable}
+      className={`${nunito.variable} ${playfairDisplay.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased min-h-screen flex flex-col">
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="system"
           enableSystem
-          disableTransitionOnChange={false}
+          disableTransitionOnChange
           themes={["light", "dark"]}
         >
           <ScrollProgress />
