@@ -380,7 +380,7 @@ export default function JoinPage() {
             <Emblem size={80} className="text-gold" />
           </motion.div>
 
-          <h2 className="font-serif text-2xl font-bold text-foreground mb-3">
+          <h2 className="font-sans text-2xl font-bold text-foreground mb-3">
             Application Received!
           </h2>
           <p className="text-muted-foreground text-sm leading-relaxed mb-5">
@@ -391,7 +391,7 @@ export default function JoinPage() {
           </p>
 
           {/* Shimmer motto */}
-          <p className="text-gradient-gold animate-shimmer font-serif italic font-bold text-lg mb-6">
+          <p className="text-gradient-gold animate-shimmer font-sans italic font-bold text-lg mb-6">
             &ldquo;Ofu Obi Umunwanne&rdquo;
           </p>
 
@@ -421,7 +421,7 @@ export default function JoinPage() {
             <motion.div variants={fadeInUp}>
               <Badge variant="gold" className="text-xs tracking-widest animate-pulse-gold">BECOME A MEMBER</Badge>
             </motion.div>
-            <motion.h1 variants={fadeInUp} className="font-serif text-3xl sm:text-4xl font-bold text-white">
+            <motion.h1 variants={fadeInUp} className="font-sans text-3xl sm:text-4xl font-bold text-white">
               Membership Application
             </motion.h1>
             <motion.p variants={fadeInUp} className="text-white/75 max-w-lg text-sm leading-relaxed">
@@ -441,7 +441,7 @@ export default function JoinPage() {
             {/* Fee badge */}
             <motion.div variants={fadeInUp} className="bg-white/10 border border-gold/40 rounded-xl px-6 py-3">
               <p className="text-white/60 text-xs">One-time Registration Fee</p>
-              <p className="text-gradient-gold animate-shimmer font-serif font-bold text-2xl mt-0.5">₦100,000</p>
+              <p className="text-gradient-gold animate-shimmer font-sans font-bold text-2xl mt-0.5">₦100,000</p>
             </motion.div>
           </motion.div>
         </div>

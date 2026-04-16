@@ -283,7 +283,7 @@ export function Navbar() {
                 <div className="relative z-10 flex items-center gap-2.5">
                   <Image src="/logo.webp" alt="logo" width={36} height={36} className="object-cover" />
                   <div>
-                    <p className="font-serif font-bold text-foreground">LikeMinds</p>
+                    <p className="font-sans font-bold text-foreground">LikeMinds</p>
                     <p className="text-xs text-muted-foreground">1980–1986</p>
                   </div>
                 </div>

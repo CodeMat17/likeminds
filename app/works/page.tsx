@@ -62,7 +62,7 @@ export default function WorksPage() {
             <motion.div variants={scaleIn}>
               <Emblem size={90} className="text-gold" />
             </motion.div>
-            <motion.h1 variants={fadeInUp} className="font-serif text-4xl sm:text-5xl font-bold text-white">
+            <motion.h1 variants={fadeInUp} className="font-sans text-4xl sm:text-5xl font-bold text-white">
               Our Works in Nomeh
             </motion.h1>
             <motion.p variants={fadeInUp} className="text-white/75 text-lg max-w-2xl">
@@ -180,7 +180,7 @@ export default function WorksPage() {
                               <CalendarIcon className="size-3" />
                               <span>{work.date}</span>
                             </div>
-                            <h2 className="font-serif font-bold text-foreground text-base leading-snug mb-2 group-hover:text-primary transition-colors duration-200">
+                            <h2 className="font-sans font-bold text-foreground text-base leading-snug mb-2 group-hover:text-primary transition-colors duration-200">
                               {work.title}
                             </h2>
                             <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed flex-1">

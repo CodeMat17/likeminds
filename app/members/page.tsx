@@ -94,7 +94,7 @@ function BioSheet({
                   {member.position}
                 </Badge>
                 <SheetHeader className="p-0 gap-0">
-                  <SheetTitle className="font-serif text-xl font-bold text-white leading-tight text-left">
+                  <SheetTitle className="font-sans text-xl font-bold text-white leading-tight text-left">
                     {member.title} {member.name}
                   </SheetTitle>
                 </SheetHeader>
@@ -243,7 +243,7 @@ export default function MembersPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25 }}
-              className="font-serif text-4xl sm:text-5xl font-bold text-white"
+              className="font-sans text-4xl sm:text-5xl font-bold text-white"
             >
               The LikeMinds Family
             </motion.h1>
@@ -334,7 +334,7 @@ export default function MembersPage() {
                         {/* Info */}
                         <div className="p-3.5 flex flex-col flex-1">
                           <div className="flex-1">
-                            <p className="font-serif font-bold text-foreground text-sm leading-tight mb-0.5">
+                            <p className="font-sans font-bold text-foreground text-sm leading-tight mb-0.5">
                               {member.title} {member.name}
                             </p>
                             <p className="text-[11px] text-primary font-medium truncate">

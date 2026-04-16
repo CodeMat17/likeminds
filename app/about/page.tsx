@@ -64,7 +64,7 @@ export default function AboutPage() {
               <Emblem size={90} className="text-gold relative z-10" />
             </motion.div>
 
-            <motion.h1 variants={fadeInUp} className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-white">
+            <motion.h1 variants={fadeInUp} className="font-sans text-4xl sm:text-5xl md:text-6xl font-bold text-white">
               About LikeMinds
             </motion.h1>
             <motion.p variants={fadeInUp} className="text-white/75 text-lg max-w-2xl leading-relaxed">
@@ -87,7 +87,7 @@ export default function AboutPage() {
               className="space-y-6"
             >
               <span className=" font-bold tracking-[0.3em] text-primary uppercase">Our Story</span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground leading-tight">
+              <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground leading-tight">
                 Who We Are & Why We Exist
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
@@ -130,7 +130,7 @@ export default function AboutPage() {
                 <div key={item.label} className={`rounded-2xl p-5 ${item.bg} border border-border`}>
                   <div className={`mb-3 ${item.color}`}><item.icon className="size-5" /></div>
                   <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{item.label}</p>
-                  <p className="font-serif font-bold text-foreground mt-1">{item.value}</p>
+                  <p className="font-sans font-bold text-foreground mt-1">{item.value}</p>
                 </div>
               ))}
             </motion.div>
@@ -156,7 +156,7 @@ export default function AboutPage() {
             className="text-center mb-14"
           >
             <span className=" font-bold tracking-[0.3em] text-primary uppercase">Our Mandate</span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground mt-2">
+            <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground mt-2">
               Aims & Objectives
             </h2>
             <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
@@ -206,7 +206,7 @@ export default function AboutPage() {
             className="text-center mb-14"
           >
             <span className="text-xs font-bold tracking-[0.3em] text-primary uppercase">Our Mission</span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground mt-2">
+            <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground mt-2">
               Core Objectives
             </h2>
             <div className="w-12 h-0.5 bg-gold mx-auto mt-4 rounded-full" />
@@ -232,11 +232,11 @@ export default function AboutPage() {
                   >
                     {/* Gold circle badge */}
                     <div className="w-12 h-12 rounded-full bg-green-deep border-2 border-gold/60 flex items-center justify-center shrink-0 z-10 shadow-lg">
-                      <span className="text-gold font-black font-serif text-sm">{obj.num}</span>
+                      <span className="text-gold font-black font-sans text-sm">{obj.num}</span>
                     </div>
                     {/* Content card */}
                     <div className="flex-1 bg-card rounded-2xl border border-border p-5 hover:border-gold/30 hover:shadow-lg transition-all duration-300 mb-0">
-                      <h3 className="font-serif font-bold text-foreground mb-1.5">{obj.title}</h3>
+                      <h3 className="font-sans font-bold text-foreground mb-1.5">{obj.title}</h3>
                       <p className="text-sm text-muted-foreground leading-relaxed">{obj.desc}</p>
                     </div>
                   </motion.div>

@@ -68,7 +68,7 @@ export function MissionSection() {
             <span className="text-sm font-bold tracking-[0.3em] text-primary uppercase">
               Who We Are
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mt-3 mb-5 leading-tight">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mt-3 mb-5 leading-tight">
               Driven by Purpose,
               <br />
               <span className="text-gradient-gold animate-shimmer">United in Brotherhood</span>
@@ -114,7 +114,7 @@ export function MissionSection() {
                 <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-3 text-gold/60">
                   Our Constitution
                 </p>
-                <h3 className="font-serif text-2xl font-bold text-white mb-6">
+                <h3 className="font-sans text-2xl font-bold text-white mb-6">
                   Core Principles
                 </h3>
                 <div className="space-y-4">
@@ -148,7 +148,7 @@ export function MissionSection() {
           variants={fadeInUp}
           className="text-center mb-10"
         >
-          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
+          <h3 className="font-sans text-2xl sm:text-3xl font-bold text-foreground">
             Aims & Objectives
           </h3>
           <div className="w-12 h-0.5 bg-gold mx-auto mt-3 rounded-full" />

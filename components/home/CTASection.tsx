@@ -51,7 +51,7 @@ export function CTASection() {
 
             <motion.h2
               variants={heroText}
-              className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight"
+              className="font-sans text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight"
             >
               Are you a male indigene of Nomeh Unateze{" "}
               <br className="hidden sm:block" />

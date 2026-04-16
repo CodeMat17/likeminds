@@ -56,7 +56,7 @@ export function WorksPreview() {
             <span className="text-sm font-bold tracking-[0.3em] text-primary uppercase">
               Community Impact
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground mt-2">
+            <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground mt-2">
               Our Works in the Community
             </h2>
             <p className="text-muted-foreground mt-3 max-w-xl">
@@ -114,7 +114,7 @@ export function WorksPreview() {
                       {categoryConfig[featuredWorks[0].category].icon}{" "}
                       {categoryConfig[featuredWorks[0].category].label}
                     </Badge>
-                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-white mb-2 leading-tight">
+                    <h3 className="font-sans text-xl sm:text-2xl font-bold text-white mb-2 leading-tight">
                       {featuredWorks[0].title}
                     </h3>
                     <p className="text-white/65 text-sm line-clamp-2 mb-4">
@@ -158,7 +158,7 @@ export function WorksPreview() {
                       <Badge className={`mb-2 text-[10px] ${categoryConfig[work.category].color}`}>
                         {categoryConfig[work.category].icon} {categoryConfig[work.category].label}
                       </Badge>
-                      <h3 className="font-serif text-base font-bold text-white leading-tight mb-1">
+                      <h3 className="font-sans text-base font-bold text-white leading-tight mb-1">
                         {work.title}
                       </h3>
                       <div className="flex items-center justify-between">

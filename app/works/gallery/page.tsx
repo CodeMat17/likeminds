@@ -148,7 +148,7 @@ export default function GalleryPage() {
           >
             <motion.h1
               variants={fadeInUp}
-              className="font-serif text-4xl sm:text-5xl font-bold text-white"
+              className="font-sans text-4xl sm:text-5xl font-bold text-white"
             >
               Photo Gallery
             </motion.h1>

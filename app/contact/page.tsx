@@ -62,7 +62,7 @@ export default function ContactPage() {
           >
             <motion.h1
               variants={fadeInUp}
-              className="font-serif text-4xl sm:text-5xl font-bold text-white"
+              className="font-sans text-4xl sm:text-5xl font-bold text-white"
             >
               Contact Us
             </motion.h1>
@@ -87,7 +87,7 @@ export default function ContactPage() {
               className="space-y-8"
             >
               <motion.div variants={fadeInUp}>
-                <h2 className="font-serif text-2xl font-bold text-foreground mb-2">
+                <h2 className="font-sans text-2xl font-bold text-foreground mb-2">
                   Get in Touch
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
@@ -129,7 +129,7 @@ export default function ContactPage() {
                 <p className="text-xs uppercase tracking-widest text-primary font-semibold mb-2">
                   Our Motto
                 </p>
-                <p className="font-serif text-xl italic text-foreground font-semibold">
+                <p className="font-sans text-xl italic text-foreground font-semibold">
                   &ldquo;Ofu Obi Umunwanne&rdquo;
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
@@ -153,7 +153,7 @@ export default function ContactPage() {
                     className="flex flex-col items-center justify-center gap-4 py-12 text-center"
                   >
                     <CheckCircle2Icon className="size-14 text-primary" />
-                    <h3 className="font-serif text-xl font-bold text-foreground">
+                    <h3 className="font-sans text-xl font-bold text-foreground">
                       Message Received!
                     </h3>
                     <p className="text-muted-foreground text-sm max-w-xs">
@@ -170,7 +170,7 @@ export default function ContactPage() {
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
-                      <h3 className="font-serif text-xl font-bold text-foreground mb-1">
+                      <h3 className="font-sans text-xl font-bold text-foreground mb-1">
                         Send a Message
                       </h3>
                       <p className="text-sm text-muted-foreground">

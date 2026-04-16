@@ -71,7 +71,7 @@ export default async function WorkDetailPage({ params }: Props) {
           {work.featured && (
             <Badge variant="gold" className="mb-3 ml-2 text-[10px] font-bold">FEATURED PROJECT</Badge>
           )}
-          <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight">
+          <h1 className="font-sans text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight">
             {work.title}
           </h1>
           <p className="text-white/70 mt-2 text-sm sm:text-base">{work.shortDescription}</p>
@@ -100,7 +100,7 @@ export default async function WorkDetailPage({ params }: Props) {
             {/* Content */}
             <div
               className="prose prose-sm sm:prose max-w-none text-foreground
-                prose-headings:font-serif prose-headings:text-foreground prose-headings:font-bold
+                prose-headings:font-sans prose-headings:text-foreground prose-headings:font-bold
                 prose-p:text-muted-foreground prose-p:leading-relaxed
                 prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-2
                 prose-strong:text-foreground"
@@ -128,7 +128,7 @@ export default async function WorkDetailPage({ params }: Props) {
                   <Separator className="my-4 bg-white/15" />
                   <div>
                     <p className="text-xs text-white/50 uppercase tracking-wider">Investment</p>
-                    <p className="text-2xl font-bold text-gold font-serif mt-1">{work.cost}</p>
+                    <p className="text-2xl font-bold text-gold font-sans mt-1">{work.cost}</p>
                   </div>
                 </>
               )}

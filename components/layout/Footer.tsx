@@ -46,7 +46,7 @@ export function Footer() {
               className='object-cover'
             />
             <div>
-              <h3 className='font-serif text-xl font-bold text-white'>
+              <h3 className='font-sans text-xl font-bold text-white'>
                 LikeMinds 1980–1986
               </h3>
               <p className='text-xs text-white/60 tracking-widest uppercase mt-0.5'>
