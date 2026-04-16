@@ -7,6 +7,8 @@ export interface Member {
   location: string;
   bio: string;
   photo: string;
+  phone?: number;
+  website?: string;
   social?: {
     email?: string;
     phone?: string;
@@ -22,7 +24,7 @@ export const members: Member[] = [
     occupation: "Cardiologist",
     location: "Enugu, Nigeria",
     bio: "Engr Matthew Chukwu is a distinguished...",
-    photo: '/matthew-okafor.jpg',
+    photo: '/membersPhotos/matthew.jpeg',
     social: { email: "email@matthewchukwu.com" },
   },
  
