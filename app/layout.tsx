@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     default:
-      "LikeMinds 1980–1986 | Nomeh Unateze Community Development Association",
+      "LikeMinds 1980–1986 Age Grade | Nomeh Unateze Community Development Association",
     template: "%s | LikeMinds 1980–1986 Nomeh",
   },
   description:
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     siteName: "LikeMinds 1980–1986 Association",
     title: "LikeMinds 1980–1986 | Nomeh Unateze Community Development",
     description:
-      "A non-profit age grade association dedicated to social development, community welfare, and empowerment in Nomeh, Enugu State, Nigeria.",
+      "A non-profit age grade association dedicated to social development, community welfare, and empowerment in Nomeh Unateze, Nkanu East, Enugu State, Nigeria.",
     images: [
       {
         url: `${baseUrl}/og-image.png`,
