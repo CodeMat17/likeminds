@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     );
 
     const { error } = await resend.emails.send({
-      from: "LikeMinds Website <onboarding@resend.dev>",
+      from: "LikeMinds Website <info@likemindsofficial.org>",
       to: ["info@likemindsofficial.org"],
       subject: `New Membership Application – ${fullName}`,
       html,
