@@ -188,7 +188,7 @@ export const members: Member[] = [
     location: "New Jersey, USA",
     bio: "A successful business man in New Jersey, USA.",
     photo: "/membersPhotos/monday.jpeg",
-    social: { email: "mmbaa1085@gmail.com ", phone: "" },
+    social: { email: "mmbaa1985@gmail.com ", phone: "" },
   },
   {
     id: "17",
