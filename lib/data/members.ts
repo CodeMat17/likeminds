@@ -208,7 +208,7 @@ export const members: Member[] = [
     location: "Enugu, Nigeria",
     bio: "Ani Chukwudi Lawrence aka UGOEBENAJA 1 NA NOMEH UNATAEZE. I am a member of the LikeMinds Family. I am a business man and a real estate investor. I have been involved in the real estate industry for over 10 years. I have a proven track record of success in the real estate industry. I have been a successful businessman and owner of a successful real estate business for over 10 years.",
     photo: "/membersPhotos/chukwudi.jpeg",
-    social: { email: "bigbankofficial@gmail.com ", phone: "" },
+    social: { email: "anichukwudilawrence@gmail.com", phone: "" },
   },
   {
     id: "19",
