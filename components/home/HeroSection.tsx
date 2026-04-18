@@ -162,7 +162,7 @@ export function HeroSection() {
             priority
             width={110}
             height={110}
-            src="/logo.webp"
+            src="/logo.png"
             className="relative z-10"
           />
         </motion.div>

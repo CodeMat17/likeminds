@@ -125,7 +125,7 @@ function MemberCard({ member }: { member: (typeof members)[0] }) {
         {/* Static name (hidden on hover) */}
         <div className="absolute bottom-0 left-0 right-0 p-3 transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-2">
           <p className="font-sans font-bold text-white text-sm leading-snug">
-            {member.title} {member.name}
+            {member.name}
           </p>
           <p className="text-white/60 text-[11px] truncate mt-0.5">{member.position}</p>
         </div>
@@ -134,7 +134,7 @@ function MemberCard({ member }: { member: (typeof members)[0] }) {
         <div className="absolute inset-x-0 bottom-0 h-0 group-hover:h-18 transition-all duration-500 overflow-hidden">
           <div className="absolute inset-0 glass border-t border-white/12 flex flex-col justify-center px-3 py-2">
             <p className="font-sans font-bold text-white text-sm truncate leading-tight">
-              {member.title} {member.name}
+              {member.name}
             </p>
             <p className="text-gold/80 text-[11px] truncate mt-0.5">{member.position}</p>
           </div>

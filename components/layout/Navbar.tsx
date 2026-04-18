@@ -1,34 +1,20 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { MenuIcon, XIcon, PhoneIcon, MailIcon, ChevronDownIcon } from "lucide-react";
+import { MenuIcon, XIcon, PhoneIcon, MailIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import Image from "next/image";
 
-type NavItem =
-  | { href: string; label: string; children?: never }
-  | {
-      href: string;
-      label: string;
-      children: { href: string; label: string; description?: string }[];
-    };
-
-const navLinks: NavItem[] = [
+const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
-  {
-    href: "/works",
-    label: "Works & Outings",
-    children: [
-      { href: "/works", label: "Projects", description: "Community development projects" },
-      { href: "/works/gallery", label: "Photo Gallery", description: "Memories & outings in pictures" },
-    ],
-  },
+  { href: "/works", label: "Works" },
+  { href: "/gallery", label: "Gallery" },
   { href: "/members", label: "Members" },
   { href: "/join", label: "Join Us" },
   { href: "/contact", label: "Contact" },
@@ -37,8 +23,6 @@ const navLinks: NavItem[] = [
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpenPath, setMenuOpenPath] = useState<string | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isMobileOpen = menuOpenPath === pathname;
@@ -50,23 +34,10 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(null);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
   const navBg =
     isScrolled || !isHome
       ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm"
       : "bg-transparent border-b border-transparent";
-
-  const isWorksActive = pathname.startsWith("/works");
 
   return (
     <>
@@ -91,7 +62,7 @@ export function Navbar() {
               className="flex items-center gap-2.5 group"
               aria-label="LikeMinds Home"
             >
-              <Image src="/logo.webp" alt="logo" width={40} height={40} className="object-cover" />
+              <Image src="/logo.png" alt="logo" width={40} height={40} className="object-cover" />
               <div className="hidden lg:flex flex-col leading-none">
                 <span
                   className={cn(
@@ -113,83 +84,9 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-1" ref={dropdownRef}>
+            <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => {
-                const isActive = link.children ? isWorksActive : pathname === link.href;
-
-                if (link.children) {
-                  const isOpen = dropdownOpen === link.href;
-                  return (
-                    <div key={link.href} className="relative">
-                      <button
-                        onClick={() => setDropdownOpen(isOpen ? null : link.href)}
-                        className={cn(
-                          "relative flex items-center gap-1 px-3.5 py-2 text-sm font-medium rounded-md transition-all duration-200",
-                          isActive
-                            ? !isScrolled && isHome
-                              ? "text-white bg-white/10"
-                              : "text-primary bg-primary/8"
-                            : !isScrolled && isHome
-                            ? "text-white/85 hover:text-white hover:bg-white/10"
-                            : "text-foreground/75 hover:text-foreground hover:bg-muted"
-                        )}
-                      >
-                        {link.label}
-                        <ChevronDownIcon
-                          className={cn(
-                            "size-3.5 transition-transform duration-200",
-                            isOpen && "rotate-180"
-                          )}
-                        />
-                        {isActive && (
-                          <motion.div
-                            layoutId="nav-indicator"
-                            className={cn(
-                              "absolute bottom-0.5 left-1/2 -translate-x-1/2 h-0.5 w-5 rounded-full",
-                              !isScrolled && isHome
-                                ? "bg-gold shadow-[0_0_8px_2px_oklch(0.74_0.17_72/50%)]"
-                                : "bg-primary shadow-[0_0_8px_2px_oklch(0.36_0.17_152/40%)]"
-                            )}
-                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                          />
-                        )}
-                      </button>
-
-                      <AnimatePresence>
-                        {isOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 6, scale: 0.97 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 6, scale: 0.97 }}
-                            transition={{ duration: 0.18 }}
-                            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 bg-background border border-border rounded-xl shadow-xl p-1.5 z-50"
-                          >
-                            {link.children.map((child) => (
-                              <Link
-                                key={child.href}
-                                href={child.href}
-                                onClick={() => setDropdownOpen(null)}
-                                className={cn(
-                                  "block px-3.5 py-2.5 rounded-lg transition-colors duration-150",
-                                  pathname === child.href
-                                    ? "bg-primary/10 text-primary"
-                                    : "hover:bg-muted text-foreground/80 hover:text-foreground"
-                                )}
-                              >
-                                <p className="text-sm font-medium">{child.label}</p>
-                                {child.description && (
-                                  <p className="text-xs text-muted-foreground mt-0.5">
-                                    {child.description}
-                                  </p>
-                                )}
-                              </Link>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                }
+                const isActive = pathname === link.href;
 
                 return (
                   <Link
@@ -301,36 +198,6 @@ export function Navbar() {
                   Navigation
                 </p>
                 {navLinks.map((link, i) => {
-                  if (link.children) {
-                    return (
-                      <motion.div
-                        key={link.href}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.07, duration: 0.3 }}
-                      >
-                        <div className="px-3 py-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground mt-2 mb-1">
-                          {link.label}
-                        </div>
-                        {link.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            onClick={() => setIsMobileOpen(false)}
-                            className={cn(
-                              "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium mb-1 ml-3 transition-colors",
-                              pathname === child.href
-                                ? "bg-primary text-primary-foreground"
-                                : "text-foreground hover:bg-muted"
-                            )}
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </motion.div>
-                    );
-                  }
-
                   const isActive = pathname === link.href;
                   return (
                     <motion.div
