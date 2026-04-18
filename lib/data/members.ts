@@ -233,7 +233,7 @@ export const members: Member[] = [
   {
     id: "22",
     name: "Anih Daniel Okechukwu",
-    position: "Legal Advisor",
+    position: "Legal Adviser",
     occupation: "Catholic Priest/ Legal Practitioner.",
     location: "Enugu, Nigeria",
     bio: "Anih Daniel Okechukwu is a Catholic Priest/ Legal Practitioner. He has years of experience in the legal field. OFFICE: St Mary's Parish Owo, Nkanu-East L.G.A / V. C. Odo & Co, Zandas Plaza, 111 Chime Avenue, New Haven, Enugu",
