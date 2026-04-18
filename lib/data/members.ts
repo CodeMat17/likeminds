@@ -151,7 +151,7 @@ export const members: Member[] = [
     social: { email: "princebenjack4@gmail.com ", phone: "+2250102137895" },
   },
   {
-    id: "13",
+    id: "14",
     name: "Ejike Henry Nnamani",
     position: "Financial Secretary",
     occupation: "Business",
@@ -161,7 +161,7 @@ export const members: Member[] = [
     social: { email: "mrcapital64@gmail.com ", phone: "" },
   },
   {
-    id: "14",
+    id: "15",
     name: "Uche Nwanyim Nwaosimiri K",
     position: "Provost",
     occupation: "CEO UKN GLOBAL AUTOMOBILE LIMITED ",
@@ -171,7 +171,7 @@ export const members: Member[] = [
     social: { email: "uchedon72@gmail.com ", phone: "" },
   },
   {
-    id: "15",
+    id: "16",
     name: "Ani Sunday josephat",
     position: "Member",
     occupation: "Business",
@@ -181,7 +181,7 @@ export const members: Member[] = [
     social: { email: "sunnybobo252@gmail.com ", phone: "" },
   },
   {
-    id: "16",
+    id: "17",
     name: "Monday Mba",
     position: "Member",
     occupation: "Business",
@@ -191,7 +191,7 @@ export const members: Member[] = [
     social: { email: "mmbaa1985@gmail.com ", phone: "" },
   },
   {
-    id: "17",
+    id: "18",
     name: "Arinze Chimaobi",
     position: "Treasurer",
     occupation: " SERIAL ENTREPRENEUR AND MLM PROFESSIONAL.",
@@ -201,7 +201,7 @@ export const members: Member[] = [
     social: { email: "bigbankofficial@gmail.com ", phone: "" },
   },
   {
-    id: "18",
+    id: "19",
     name: "Ani Chukwudi Lawrence",
     position: "Member",
     occupation: "CEO: Unateze Agro Farm, Real Estate and Confectioners..",
@@ -211,7 +211,7 @@ export const members: Member[] = [
     social: { email: "anichukwudilawrence@gmail.com", phone: "" },
   },
   {
-    id: "19",
+    id: "20",
     name: "Ozo Dr.(Sir) Chigbo Chukwu",
     position: "Vice Chairman",
     occupation: "Public Servant, CEO-CTC Vietnam & Valley Partners Ltd",
@@ -219,5 +219,25 @@ export const members: Member[] = [
     bio: "Ozo Dr.(Sir) Chigbo Chukwu is a Public Servant, CEO-CTC Vietnam & Valley Partners Ltd. He is a seasoned businessman with over 15 years of hands-on experience. Currently serving as a public servant in Enugu, he is strongly commitment to public service and national development.",
     photo: "/membersPhotos/ozo.webp",
     social: { email: "chukwuchigbo8@gmail.com", phone: "08037381976" },
+  },
+  {
+    id: "21",
+    name: "Anih Okolie Onyekaozulu",
+    position: "Member",
+    occupation: "HR Professional/ Trained Communicator/ Entrepreneur .",
+    location: "Rivers State, Nigeria",
+    bio: "Anih Okolie Onyekaozulu is a HR Professional/ Trained Communicator/ Entrepreneur . He has over 10 years of experience in the HR field. He is passionate about entrepreneurship and is always looking for new opportunities to grow his business.",
+    photo: "/membersPhotos/onye.jpeg",
+    social: { email: "okolieanih@yahoo.com ", phone: "08037500868" },
+  },
+  {
+    id: "22",
+    name: "Anih Daniel Okechukwu",
+    position: "Legal Advisor",
+    occupation: "Catholic Priest/ Legal Practitioner.",
+    location: "Enugu, Nigeria",
+    bio: "Anih Daniel Okechukwu is a Catholic Priest/ Legal Practitioner. He has years of experience in the legal field. OFFICE: St Mary's Parish Owo, Nkanu-East L.G.A / V. C. Odo & Co, Zandas Plaza, 111 Chime Avenue, New Haven, Enugu",
+    photo: "/membersPhotos/fr.jpeg",
+    social: { email: "anihokechukwu41@gmail.com ", phone: "07037515083" },
   },
 ];
