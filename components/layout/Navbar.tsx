@@ -63,23 +63,23 @@ export function Navbar() {
               aria-label="LikeMinds Home"
             >
               <Image src="/logo.png" alt="logo" width={40} height={40} className="object-cover" />
-              <div className="hidden lg:flex flex-col leading-none">
-                <span
+              <div className=" lg:flex flex-col leading-none">
+                <p
                   className={cn(
                     " font-bold text-lg leading-tight transition-colors duration-300",
                     !isScrolled && isHome ? "text-white" : "text-foreground"
                   )}
                 >
                   LikeMinds
-                </span>
-                <span
+                </p>
+                <p
                   className={cn(
                     "text-xs font-medium tracking-wide transition-colors duration-300",
                     !isScrolled && isHome ? "text-white/70" : "text-muted-foreground"
                   )}
                 >
                   1980–1986
-                </span>
+                </p>
               </div>
             </Link>
 
@@ -178,7 +178,7 @@ export function Navbar() {
                 {/* Uli pattern texture in drawer header */}
                 <div className="absolute inset-0 pattern-uli opacity-20 pointer-events-none" />
                 <div className="relative z-10 flex items-center gap-2.5">
-                  <Image src="/logo.webp" alt="logo" width={36} height={36} className="object-cover" />
+                  <Image src="/logo.png" alt="logo" width={36} height={36} className="object-cover" />
                   <div>
                     <p className="font-sans font-bold text-foreground">LikeMinds</p>
                     <p className="text-xs text-muted-foreground">1980–1986</p>

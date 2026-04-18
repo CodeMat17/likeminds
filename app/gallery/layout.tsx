@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Photo Gallery | LikeMinds 1980–1986 Nomeh",
+  title: "Photo Gallery",
   description:
-    "Browse photos from LikeMinds 1980–1986 community outings, projects, events, and welfare activities in Nomeh Unateze, Enugu State.",
-  alternates: { canonical: "https://likeminds-nomeh.org/gallery" },
+    "Browse the photo gallery of LikeMinds 1980–1986 Association — capturing moments of brotherhood, community events, solidarity outings, and development projects in Nomeh Unateze, Enugu.",
+  keywords: [
+    "LikeMinds gallery",
+    "Nomeh community photos",
+    "age grade events Nigeria",
+    "LikeMinds events",
+    "Nomeh Unateze photos",
+  ],
+  alternates: { canonical: "https://likemindsofficial.org/gallery" },
   openGraph: {
-    title: "Photo Gallery – LikeMinds 1980–1986",
+    title: "Photo Gallery | LikeMinds 1980–1986 Nomeh Unateze",
     description:
-      "Memories of togetherness — outings, projects, and milestones captured in pictures.",
-    url: "https://likeminds-nomeh.org/gallery",
+      "Moments of brotherhood and community captured — LikeMinds 1980–1986 Association photo gallery.",
+    url: "https://likemindsofficial.org/gallery",
   },
 };
 

@@ -15,23 +15,33 @@ const nunito = Nunito({
 });
 
 
-const baseUrl = "https://likeminds-nomeh.org";
+const baseUrl = "https://likemindsofficial.org";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "LikeMinds 1980–1986 | Nomeh Unateze Community Development Association",
+    default:
+      "LikeMinds 1980–1986 | Nomeh Unateze Community Development Association",
     template: "%s | LikeMinds 1980–1986 Nomeh",
   },
   description:
     "LikeMinds is the Nomeh Unateze 1980–1986 Age Grade Association based in Enugu. We are committed to social development, youth empowerment, community welfare, and upholding our motto: Ofu Obi Umunwanne.",
   keywords: [
     "LikeMinds",
+    "LikeMind",
+    "LikesMind",
     "Nomeh",
+    "Nkanu",
+    "Nkanu East",
     "Unateze",
     "1980",
     "1986",
     "Enugu",
+    "Imeama",
+    "Amaigbo",
+    "Amigbo",
+    "Uhuafor",
+    "Amukabi",
     "age grade association",
     "community development",
     "Igbo",
@@ -56,9 +66,9 @@ export const metadata: Metadata = {
       "A non-profit age grade association dedicated to social development, community welfare, and empowerment in Nomeh, Enugu State, Nigeria.",
     images: [
       {
-        url: `${baseUrl}/logo.webp`,
-        width: 400,
-        height: 400,
+        url: `${baseUrl}/og-image.png`,
+        width: 1200,
+        height: 675,
         alt: "LikeMinds 1980–1986 Association – Ofu Obi Umunwanne",
       },
     ],
@@ -68,7 +78,7 @@ export const metadata: Metadata = {
     title: "LikeMinds 1980–1986 | Nomeh Unateze",
     description:
       "Nomeh Unateze 1980–1986 Age Grade – committed to brotherhood, community development and empowerment.",
-    images: [`${baseUrl}/logo.webp`],
+    images: [`${baseUrl}/og-image.png`],
   },
   robots: {
     index: true,

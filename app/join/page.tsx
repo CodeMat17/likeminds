@@ -333,14 +333,30 @@ export default function JoinPage() {
 
   const handleBack = () => setCurrentStep((s) => Math.max(s - 1, 1));
 
-  const onSubmit = async (_data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    await new Promise((r) => setTimeout(r, 2000));
-    setIsLoading(false);
-    setIsSubmitted(true);
-    toast.success("Application submitted successfully!", {
-      description: "We will review your application and contact you soon.",
-    });
+    try {
+      const res = await fetch("/api/join", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json.error ?? "Submission failed");
+      }
+
+      setIsSubmitted(true);
+      toast.success("Application submitted successfully!", {
+        description: "We will review your application and contact you soon.",
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      toast.error(`Submission failed: ${msg}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isSubmitted) {
@@ -555,8 +571,8 @@ export default function JoinPage() {
 
         <p className="text-center text-xs text-muted-foreground mt-6">
           Need help? Contact us at{" "}
-          <a href="mailto:info@likeminds-nomeh.org" className="text-primary hover:underline">
-            info@likeminds-nomeh.org
+          <a href="mailto:info@likemindsofficial.org" className="text-primary hover:underline">
+            info@likemindsofficial.org
           </a>
         </p>
       </div>

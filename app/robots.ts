@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/"],
       },
     ],
-    sitemap: "https://likeminds-nomeh.org/sitemap.xml",
-    host: "https://likeminds-nomeh.org",
+    sitemap: "https://likemindsofficial.org/sitemap.xml",
+    host: "https://likemindsofficial.org",
   };
 }
