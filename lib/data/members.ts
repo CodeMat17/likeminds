@@ -222,11 +222,11 @@ export const members: Member[] = [
   },
   {
     id: "21",
-    name: "Anih Okolie Onyekaozulu",
+    name: "Chief Anih Okolie Onyekaozulu",
     position: "Member",
     occupation: "HR Professional/ Trained Communicator/ Entrepreneur .",
     location: "Rivers State, Nigeria",
-    bio: "Anih Okolie Onyekaozulu is a HR Professional/ Trained Communicator/ Entrepreneur . He has over 10 years of experience in the HR field. He is passionate about entrepreneurship and is always looking for new opportunities to grow his business.",
+    bio: "Chief OKolie is currently working as a senior Communications Officer at Nigeria LNG Limited till date. Chief Okolie is a HR Professional with over 20 years of experience in Human Resources, Personnel Data Management, Data Analysis, and SAP systems (Payroll SME, ECM-SME, Time SME, Personnel Administration SME and SuccessFactor). Chief Okolie is a community leader, active in Nomeh activities and an Ozo title holder among many other community titles. Chief Okolie is a social person, volunteer in many non profit activities with several awards to him name.",
     photo: "/membersPhotos/onye.jpeg",
     social: { email: "okolieanih@yahoo.com ", phone: "08037500868" },
   },
