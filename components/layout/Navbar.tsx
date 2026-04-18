@@ -230,11 +230,11 @@ export function Navbar() {
                 </Button>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground px-1">
                   <MailIcon className="size-3" />
-                  <span>info@likeminds-nomeh.org</span>
+                  <span>info@likemindsofficial.org</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground px-1">
                   <PhoneIcon className="size-3" />
-                  <span>+234 800 000 0000</span>
+                  <span>+234 803 750 1282</span>
                 </div>
               </div>
             </motion.div>
