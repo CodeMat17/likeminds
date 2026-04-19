@@ -222,7 +222,7 @@ export default function AboutPage() {
                   <div className="shrink-0 w-1 rounded-full bg-linear-to-b from-gold/80 to-gold/20 self-stretch" />
                   <div>
                     <h3 className="font-sans font-bold text-foreground mb-2">{item.heading}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{item.body}</p>
+                    <p className="text-base text-muted-foreground leading-relaxed">{item.body}</p>
                   </div>
                 </motion.div>
               ))}
