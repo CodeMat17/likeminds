@@ -103,7 +103,7 @@ export const members: Member[] = [
     id: "9",
     name: "Engr. Anionovo Darlington Chukwuebuka",
     position: "Member",
-    occupation: "Quality Assurance & Quality Control Inspector (QA/QC) @ RAEC",
+    occupation: "Quality Assurance & Quality Control Inspector (QA/QC)",
     location: "Rivers State, Nigeria",
     bio: "Quality Control Inspector (QA/QC) @ RAEC.",
     photo: "/membersPhotos/anionovo.jpeg",
