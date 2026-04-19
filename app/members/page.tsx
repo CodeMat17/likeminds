@@ -207,22 +207,33 @@ function BioSheet({
 // ─── TiltCard wrapper — 3D hover tilt ────────────────────────────────────────
 function TiltCard({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
   const rotateX = useSpring(useMotionValue(0), { stiffness: 120, damping: 20 });
   const rotateY = useSpring(useMotionValue(0), { stiffness: 120, damping: 20 });
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      const rect = ref.current?.getBoundingClientRect();
-      if (!rect) return;
-      const xPct = (e.clientX - rect.left) / rect.width - 0.5;
-      const yPct = (e.clientY - rect.top) / rect.height - 0.5;
-      rotateY.set(xPct * 5);
-      rotateX.set(-yPct * 5);
+      if (rafRef.current !== null) return;
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null;
+        const rect = ref.current?.getBoundingClientRect();
+        if (!rect) return;
+        const xPct = (clientX - rect.left) / rect.width - 0.5;
+        const yPct = (clientY - rect.top) / rect.height - 0.5;
+        rotateY.set(xPct * 5);
+        rotateX.set(-yPct * 5);
+      });
     },
     [rotateX, rotateY],
   );
 
   const handleMouseLeave = useCallback(() => {
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
     rotateX.set(0);
     rotateY.set(0);
   }, [rotateX, rotateY]);

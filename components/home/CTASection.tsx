@@ -34,7 +34,7 @@ export function CTASection() {
             className="flex flex-col items-center gap-6"
           >
             {/* Floating Emblem — richer than the plain logo */}
-            <motion.div variants={heroText} className="animate-float">
+            <motion.div variants={heroText}>
               <div className="p-3 rounded-full bg-white/8 border border-white/12 backdrop-blur-sm">
                 <motion.div
                   animate={{ rotate: [0, 5, 0, -5, 0] }}

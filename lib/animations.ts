@@ -68,12 +68,11 @@ export const staggerContainerFast: Variants = {
 };
 
 export const heroText: Variants = {
-  hidden: { opacity: 0, y: 50, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -119,20 +118,17 @@ export const slideInRight: Variants = {
   },
 };
 
-// Digit-flip: for AnimatePresence-based counter animation
 export const digitFlip: Variants = {
-  initial: { rotateX: -90, opacity: 0, y: -20 },
+  initial: { opacity: 0, y: -16 },
   animate: {
-    rotateX: 0,
     opacity: 1,
     y: 0,
-    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
   },
   exit: {
-    rotateX: 90,
     opacity: 0,
-    y: 20,
-    transition: { duration: 0.2, ease: "easeIn" },
+    y: 16,
+    transition: { duration: 0.18, ease: "easeIn" },
   },
 };
 

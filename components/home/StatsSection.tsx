@@ -59,16 +59,16 @@ function FlipCounter({ value, suffix }: { value: number; suffix: string }) {
   const digits = displayValue.toLocaleString().split("");
 
   return (
-    <div ref={ref} className="flex items-end justify-center gap-0.5" style={{ perspective: "400px" }}>
+    <div ref={ref} className="flex items-end justify-center gap-0.5 overflow-hidden">
       {digits.map((char, i) => (
-        <AnimatePresence key={`${i}-${char}`} mode="popLayout">
+        <AnimatePresence key={i} mode="popLayout">
           <motion.span
-            key={char + i + displayValue}
-            className="inline-block tabular-nums"
-            initial={{ rotateX: -90, opacity: 0, y: -16 }}
-            animate={{ rotateX: 0, opacity: 1, y: 0 }}
-            exit={{ rotateX: 90, opacity: 0, y: 16 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            key={char + i}
+            className="inline-block tabular-nums will-change-transform"
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           >
             {char}
           </motion.span>

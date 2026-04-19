@@ -38,12 +38,9 @@ type BlobConfig = {
   color: string; duration: number; delay: number;
 };
 
-// Brand-accurate blobs — deep greens and gold shimmer (no more blue tint)
 const BLOBS: BlobConfig[] = [
-  { cx: "15%",  cy: "30%", size: 560, color: "oklch(0.28 0.12 152 / 60%)",  duration: 18, delay: 0 },
-  { cx: "78%",  cy: "22%", size: 420, color: "oklch(0.74 0.17 72 / 12%)",   duration: 22, delay: 4 },
-  { cx: "62%",  cy: "72%", size: 500, color: "oklch(0.20 0.10 152 / 70%)",  duration: 20, delay: 7 },
-  { cx: "98%",  cy: "78%", size: 370, color: "oklch(0.74 0.17 72 / 8%)",    duration: 16, delay: 2 },
+  { cx: "15%", cy: "30%", size: 560, color: "oklch(0.28 0.12 152 / 60%)", duration: 20, delay: 0 },
+  { cx: "78%", cy: "68%", size: 450, color: "oklch(0.74 0.17 72 / 10%)",  duration: 24, delay: 6 },
 ];
 
 const STATS = [
@@ -92,11 +89,11 @@ export function HeroSection() {
 
       {/* ── Animated background blobs ───────────────── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div className="absolute inset-0" style={{ y: bgY }}>
+        <motion.div className="absolute inset-0 will-change-transform" style={{ y: bgY }}>
           {BLOBS.map((blob, idx) => (
             <motion.div
               key={idx}
-              className="absolute rounded-full"
+              className="absolute rounded-full will-change-transform"
               style={{
                 left: `calc(${blob.cx} - ${blob.size / 2}px)`,
                 top: `calc(${blob.cy} - ${blob.size / 2}px)`,
@@ -106,9 +103,8 @@ export function HeroSection() {
                 filter: "blur(80px)",
               }}
               animate={{
-                x: [0, 38, -22, 30, 0],
-                y: [0, -28, 20, -14, 0],
-                scale: [1, 1.08, 0.95, 1.05, 1],
+                x: [0, 30, -18, 0],
+                y: [0, -20, 14, 0],
               }}
               transition={{
                 duration: blob.duration,
@@ -149,7 +145,7 @@ export function HeroSection() {
           initial={{ opacity: 0, scale: 0.7 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.85, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-7 animate-pulse-gold rounded-full relative flex items-center justify-center">
+          className="mb-7 rounded-full relative flex items-center justify-center">
           {/* Rotating Emblem watermark behind the logo */}
           <motion.div
             className="absolute opacity-[0.07] pointer-events-none"
