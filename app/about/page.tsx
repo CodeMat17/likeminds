@@ -145,6 +145,115 @@ export default function AboutPage() {
         <div className="flex-1 h-px bg-linear-to-l from-transparent via-gold/40 to-transparent" />
       </div>
 
+      {/* Founding History */}
+      <section className="py-20 bg-muted/30 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={fadeInUp}
+            className="text-center mb-14"
+          >
+            <span className="font-bold tracking-[0.3em] text-primary uppercase">Our Beginning</span>
+            <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground mt-2">
+              How LikeMinds Began
+            </h2>
+            <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
+              A phone call. A shared laugh. A decision that made history.
+            </p>
+            <div className="w-12 h-0.5 bg-gold mx-auto mt-4 rounded-full" />
+          </motion.div>
+
+          <div className="max-w-4xl mx-auto">
+            {/* Pull quote */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={scaleIn}
+              className="relative bg-green-deep rounded-3xl px-8 py-10 md:px-14 md:py-12 mb-12 overflow-hidden noise"
+            >
+              <div className="absolute inset-0 pattern-diamond pointer-events-none opacity-60" />
+              <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/50 to-transparent" />
+              <div className="absolute bottom-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/30 to-transparent" />
+              <div className="relative z-10 text-center">
+                <span className="text-gold/30 font-sans font-black text-8xl leading-none select-none absolute -top-2 left-6">&ldquo;</span>
+                <p className="text-white/90 text-xl sm:text-2xl font-semibold leading-relaxed italic relative z-10 px-4">
+                  It should not end here. Since we are all within 1980 to 1986, let us form an Age Grade so we can keep the spirit, one love, growing.
+                </p>
+                <p className="text-gold/70 text-sm font-bold tracking-widest uppercase mt-5">
+                  — The suggestion that started it all, May 2024
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Narrative */}
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              className="space-y-6"
+            >
+              {[
+                {
+                  heading: "A Call That Was Never Meant to Be Historic",
+                  body: "Sometime in May 2024, a few friends, Nomeh indigenes born between 1980 and 1986, got on a call to share pleasantries and jokes. Laughter filled the atmosphere. The kind of warmth that only old friends can stir swept through every voice on the line, gladdening every heart. Nobody planned for that call to change anything. And yet, it changed everything.",
+                },
+                {
+                  heading: "The Idea That Took Root",
+                  body: "In the middle of the merriment, someone paused and said something that would outlast the laughter: \"It should not end here.\" That simple thought was all it took. Since everyone on the call was born within the same window of years, 1980 to 1986, it would be beautiful to formalise what already existed between them: form an Age Grade, so that one love could keep growing. The idea landed with warmth and unanimous agreement. The friendship would not remain just a phone call. It would become a movement.",
+                },
+                {
+                  heading: "A Name and a Declaration",
+                  body: "In the days that followed, a name was adopted: LikeMinds - Ofu Obi Umunwanne. It was more than a name, it was a declaration. Ofu Obi Umunwanne means \"one heart, one brotherhood,\" and it perfectly captured what these men already were to one another. With that name came a sense of responsibility: to channel their collective talent, resources, and passion toward the development of Nomeh Unateze, the community that raised them.",
+                },
+                {
+                  heading: "The First of Its Kind",
+                  body: "What began as a phone call made history. LikeMinds 1980–1986 became the first known Age Grade group in Nomeh Unateze, and the first formally registered Age Grade with the Corporate Affairs Commission, CAC, in the community, bearing registration number RN. 7810996. Great things rarely begin with grand plans. They begin with people who love each other, who choose not to let a good thing end.",
+                },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  variants={fadeInUp}
+                  className="flex gap-5 bg-card rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-md transition-all duration-300"
+                >
+                  <div className="shrink-0 w-1 rounded-full bg-linear-to-b from-gold/80 to-gold/20 self-stretch" />
+                  <div>
+                    <h3 className="font-sans font-bold text-foreground mb-2">{item.heading}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.body}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Closing statement */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              className="mt-10 text-center"
+            >
+              <div className="flex items-center gap-3 justify-center mb-4">
+                <div className="h-px w-16 bg-linear-to-r from-transparent to-gold/60" />
+                <span className="text-gold text-[9px]">◆</span>
+                <div className="h-px w-16 bg-linear-to-l from-transparent to-gold/60" />
+              </div>
+              <p className="text-foreground font-semibold italic text-lg">Ofu Obi Umunwanne.</p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Emblem separator */}
+      <div className="flex items-center gap-4 max-w-7xl mx-auto px-8 py-2">
+        <div className="flex-1 h-px bg-linear-to-r from-transparent via-gold/40 to-transparent" />
+        <Emblem size={32} variant="icon" className="text-gold opacity-50" />
+        <div className="flex-1 h-px bg-linear-to-l from-transparent via-gold/40 to-transparent" />
+      </div>
+
       {/* Aims & Objectives */}
       <section id="objectives" className="py-20 bg-muted/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
