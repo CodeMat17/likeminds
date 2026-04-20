@@ -29,7 +29,7 @@ const stats = [
   },
   {
     icon: CalendarIcon,
-    value: 3,
+    value: 2,
     suffix: "+ yrs",
     label: "Years Active",
     description: "Rooted in brotherhood",
