@@ -240,4 +240,14 @@ export const members: Member[] = [
     photo: "/membersPhotos/fr.jpeg",
     social: { email: "anihokechukwu41@gmail.com ", phone: "07037515083" },
   },
+  {
+    id: "23",
+    name: "Friday Ani",
+    position: "Member",
+    occupation: "Business.",
+    location: "Kano, Nigeria",
+    bio: "CEO F. DIVINE GRACE STEEL COMPANY @ No 152 kofar ruwa market kano. Deals in all kinds of building materials such as Iron, Steel, General Contractor and Merchandize.",
+    photo: "/membersPhotos/nweke.jpeg",
+    social: { email: "", phone: "08032877981" },
+  },
 ];
