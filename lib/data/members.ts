@@ -167,7 +167,7 @@ export const members: Member[] = [
     occupation: "CEO UKN GLOBAL AUTOMOBILE LIMITED ",
     location: "Stockholm Sweden",
     bio: "I am electrician engineer by professional with progressive experience across planning, operations, and management roles. I began my career in engineering Field Few Years ago, As a result of consistent results and leadership, I was promoted to at Elgiganten.se Electric Cables, overseeing end-to-end supply chain activities and supporting business objectives. My strong interest in combining practical industry experience with advanced managerial and strategic knowledge..",
-    photo: "/membersPhotos/ikenomeh.jpeg",
+    photo: "/membersPhotos/uche.jpeg",
     social: { email: "uchedon72@gmail.com ", phone: "" },
   },
   {
