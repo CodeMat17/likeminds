@@ -261,4 +261,15 @@ export const members: Member[] = [
     social: { email: "", phone: "08033591663" },
     website: "https://www.kambestmed.com",
   },
+  {
+    id: "25",
+    name: "Daniel Nkwachukwu Mba",
+    position: "Member",
+    occupation: "Business.",
+    location: "Abuja, Nigeria",
+    bio: "Bussinessman, Entrepreneur for over 10 years.",
+    photo: "/membersPhotos/dangreat.jpeg",
+    social: { email: "", phone: "" },
+    website: "",
+  },
 ];
