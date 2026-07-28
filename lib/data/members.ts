@@ -269,7 +269,24 @@ export const members: Member[] = [
     location: "Abuja, Nigeria",
     bio: "Daniel Nkwachukwu Mba is the CEO of Dangreat Automobiles. Specialises in sales and services of all types of auto cooling system such as Compressor, Condenser, Drier, Evaporator, etc.",
     photo: "/membersPhotos/dangreat.jpeg",
-    social: { email: "danielmba605@gmail.com", phone: "09064371906, 08084778420" },
+    social: {
+      email: "danielmba605@gmail.com",
+      phone: "09064371906, 08084778420",
+    },
+    website: "",
+  },
+  {
+    id: "26",
+    name: "Udoka Onyeabor",
+    position: "Member",
+    occupation: "Business.",
+    location: "Lagos, Nigeria",
+    bio: "Udoka Onyeabor is a businessman based in Lagos, Nigeria. He is a successful entrepreneur with years of experience in the business world.",
+    photo: "/membersPhotos/udoka.webp",
+    social: {
+      email: "onyeaborkingsley@gmail.com",
+      phone: "08066568595",
+    },
     website: "",
   },
 ];
