@@ -259,7 +259,7 @@ export const members: Member[] = [
     bio: "Orji Nkemdilim Moses, popularly known as KAMBEST, is a respected entrepreneur and founder of KAMBEST Health Solutions, a trusted health and wellness brand serving customers across Nigeria. He is known for his passion for helping people and creating solutions. He is committed to business excellence, community development, and positive impact.",
     photo: "/membersPhotos/nkem.jpeg",
     social: { email: "", phone: "08033591663" },
-    website: "https://www.kambestmed.com",
+    website: "https://www.kambestmeds.com",
   },
   {
     id: "25",
