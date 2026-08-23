@@ -289,4 +289,18 @@ export const members: Member[] = [
     },
     website: "",
   },
+  {
+    id: "27",
+    name: "Okeke Denis Ogbonna",
+    position: "Member",
+    occupation: "Business.",
+    location: "Lagos, Nigeria",
+    bio: "CEO OGB Uludinachi Enterprises. Super principal lotto agency of Modern lottery Nigeria and realtor under pineleaf real estate and properties Limited within South east and South South for many years of good records and successful transactions in real estate under PINELEAF AND PROPERTY LIMITED.",
+    photo: "/membersPhotos/denis.jpeg",
+    social: {
+      email: "",
+      phone: "08086007500",
+    },
+    website: "",
+  },
 ];
