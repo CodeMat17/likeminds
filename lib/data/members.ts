@@ -303,4 +303,18 @@ export const members: Member[] = [
     },
     website: "",
   },
+  {
+    id: "28",
+    name: "Engr. sunday Amechi Onu (MNSE PMP)",
+    position: "Member",
+    occupation: "Telecommunications Engineer.",
+    location: "Enugu, Nigeria",
+    bio: "Engr. Sunday Amechi onu is an engineer by profession and  A member of the Nigerian Society of Engineers and COREN Registered. He is also an expert in project management. He has over 10 years of experience in the telecommunications sector.",
+    photo: "/membersPhotos/amaechi.jpeg",
+    social: {
+      email: "",
+      phone: "08068791750",
+    },
+    website: "",
+  },
 ];

@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 const stats = [
   {
     icon: UsersIcon,
-    value: 24,
+    value: 28,
     suffix: "+",
     label: "Active Members",
     description: "Professionals & community leaders across Nigeria",
