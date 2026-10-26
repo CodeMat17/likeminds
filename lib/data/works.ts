@@ -35,3 +35,11 @@ LikeMinds remains steadfast in its mission: to honour the bonds forged between 1
 ];
 
 export const getWorkBySlug = (slug: string) => works.find((w) => w.slug === slug);
+
+// Plain-text preview of a work's markdown body
+export const getExcerpt = (work: Work, length = 160) =>
+  work.content
+    .replace(/#+\s[^\n]*/g, "")
+    .replace(/\*+/g, "")
+    .trim()
+    .slice(0, length);

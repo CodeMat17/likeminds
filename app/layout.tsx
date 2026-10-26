@@ -1,17 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Nunito } from "next/font/google";
+import { Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { SmoothScroll } from "@/components/providers/SmoothScroll";
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  axes: ["SOFT", "WONK", "opsz"],
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 
@@ -96,8 +104,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8f4ec" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b1a0e" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f1e6" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e1712" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -112,7 +120,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={nunito.variable}
+      className={`${fraunces.variable} ${manrope.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased min-h-screen flex flex-col">
@@ -123,10 +131,12 @@ export default function RootLayout({
           disableTransitionOnChange
           themes={["light", "dark"]}
         >
-          <ScrollProgress />
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <SmoothScroll>
+            <ScrollProgress />
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </SmoothScroll>
           <Toaster richColors position="bottom-right" />
         </ThemeProvider>
       </body>

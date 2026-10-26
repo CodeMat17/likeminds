@@ -2,103 +2,100 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRightIcon, CalendarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import {
+  ArrowUpRightIcon,
+  GraduationCapIcon,
+  HeartHandshakeIcon,
+  WrenchIcon,
+} from "lucide-react";
 import { works } from "@/lib/data/works";
-import { staggerContainer, fadeInUp, scaleIn } from "@/lib/animations";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Reveal } from "@/components/motion/Reveal";
+import { WorkCard } from "@/components/works/WorkCard";
+
+// Initiatives announced in our IMUYA 2024 report
+const horizon = [
+  {
+    icon: GraduationCapIcon,
+    title: "Scholarship awards",
+    body: "For academically outstanding students of Nomeh Unateze who need support.",
+  },
+  {
+    icon: WrenchIcon,
+    title: "Youth empowerment",
+    body: "Vocational skills and entrepreneurial capacity for young people.",
+  },
+  {
+    icon: HeartHandshakeIcon,
+    title: "Community welfare",
+    body: "Support for widows, the elderly and vulnerable households.",
+  },
+];
 
 export function WorksPreview() {
   const preview = works.slice(0, 3);
 
   return (
-    <section className="relative py-24 bg-background overflow-hidden">
-      <div className="absolute inset-0 pattern-uli opacity-40 pointer-events-none" />
+    <section className='relative bg-background py-24 sm:py-32'>
+      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <div className='flex flex-col justify-between gap-8 lg:flex-row lg:items-end'>
+          <SectionHeading
+            eyebrow='Community impact'
+            title='Promises kept,'
+            accent='on home soil.'
+            description='From co-sponsoring football tournaments to scholarships and empowerment — every project is a testament to our commitment to Nomeh Unateze.'
+          />
+          <Reveal delay={0.2}>
+            <Link
+              href='/works'
+              className='group inline-flex h-12 shrink-0 items-center gap-2 rounded-full border border-foreground/15 px-6 text-sm font-bold text-foreground transition-colors duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground'>
+              All projects
+              <ArrowUpRightIcon className='size-4 transition-transform duration-300 group-hover:rotate-45' />
+            </Link>
+          </Reveal>
+        </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={fadeInUp}
-          className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14"
-        >
-          <div>
-            <span className="text-sm font-bold tracking-[0.3em] text-primary uppercase">
-              Community Impact
-            </span>
-            <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground mt-2">
-              Our Works in the Community
-            </h2>
-            <p className="text-muted-foreground mt-3 max-w-xl">
-              From co-sponsoring football tournaments to scholarships and empowerment —
-              every project is a testament to our commitment to Nomeh Unateze.
-            </p>
+        <div className='mt-14 grid gap-6 lg:grid-cols-12'>
+          <div className='grid gap-6 lg:col-span-8'>
+            {preview.map((work, i) => (
+              <Reveal key={work.id} delay={i * 0.1}>
+                <WorkCard work={work} index={i} featured={i === 0} />
+              </Reveal>
+            ))}
           </div>
-          <Button asChild variant="outline" className="self-start sm:self-auto shrink-0 rounded-full">
-            <Link href="/works" className="gap-2">
-              All Projects
-              <ArrowRightIcon className="size-4" />
-            </Link>
-          </Button>
-        </motion.div>
 
-        {/* Cards */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {preview.map((work) => {
-            const excerpt = work.content
-              .replace(/#+\s[^\n]*/g, "")
-              .replace(/\*+/g, "")
-              .trim()
-              .slice(0, 160);
-
-            return (
-              <motion.div key={work.id} variants={scaleIn} className="group">
-                <Link href={`/works/${work.slug}`} className="block h-full">
-                  <article className="bg-card rounded-2xl border border-border overflow-hidden hover:border-primary/30 hover:shadow-xl transition-all duration-300 h-full flex flex-col p-6">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-                      <CalendarIcon className="size-3.5" />
-                      <span>{work.date}</span>
-                    </div>
-                    <h3 className="font-sans font-bold text-foreground text-base leading-snug mb-3 group-hover:text-primary transition-colors duration-200">
-                      {work.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-4">
-                      {excerpt}…
-                    </p>
-                    <div className="mt-5 pt-4 border-t border-border flex items-center justify-end">
-                      <span className="text-xs font-semibold text-primary flex items-center gap-1">
-                        Read More <ArrowRightIcon className="size-3" />
+          {/* On the horizon */}
+          <Reveal delay={0.15} className='lg:col-span-4'>
+            <div className='relative h-full overflow-hidden rounded-3xl border border-border bg-card p-8'>
+              <div className='pattern-uli pointer-events-none absolute inset-0 opacity-50' />
+              <div className='relative'>
+                <p className='eyebrow text-clay'>On the horizon · 2026</p>
+                <p className='font-display mt-3 text-2xl leading-snug font-medium text-foreground'>
+                  What we are building next
+                </p>
+                <ul className='mt-8 space-y-6'>
+                  {horizon.map((h, i) => (
+                    <motion.li
+                      key={h.title}
+                      initial={{ opacity: 0, x: 16 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.7, delay: 0.2 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                      className='flex gap-4'>
+                      <span className='grid size-11 shrink-0 place-items-center rounded-2xl bg-clay-muted text-clay'>
+                        <h.icon className='size-5' />
                       </span>
-                    </div>
-                  </article>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInUp}
-          className="mt-12 text-center"
-        >
-          <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8">
-            <Link href="/works">
-              Explore All Projects
-              <ArrowRightIcon className="size-4 ml-1" />
-            </Link>
-          </Button>
-        </motion.div>
+                      <div>
+                        <p className='font-semibold text-foreground'>{h.title}</p>
+                        <p className='mt-1 text-sm leading-relaxed text-muted-foreground'>{h.body}</p>
+                      </div>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

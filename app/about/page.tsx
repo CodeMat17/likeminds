@@ -10,10 +10,41 @@ import {
   ShieldIcon,
   BookOpenIcon,
   BuildingIcon,
+  HandHeartIcon,
+  SunIcon,
 } from "lucide-react";
-import { staggerContainer, fadeInUp, fadeInLeft, fadeInRight, scaleIn, timelineItem } from "@/lib/animations";
-import Image from "next/image";
-import { Emblem } from "@/components/ui/Emblem";
+import { PageHero } from "@/components/ui/PageHero";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Reveal, ScrollHighlight } from "@/components/motion/Reveal";
+import { DiamondRule, UliBand } from "@/components/ui/Ornaments";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const facts = [
+  { label: "Non-Profit", value: "Organization", icon: HeartIcon },
+  { label: "Non-Political", value: "Association", icon: ScaleIcon },
+  { label: "Age Bracket", value: "1980 – 1986", icon: UsersIcon },
+  { label: "Base", value: "Enugu, Nigeria", icon: BuildingIcon },
+];
+
+const chapters = [
+  {
+    heading: "A Call That Was Never Meant to Be Historic",
+    body: "Sometime in May 2024, a few friends, Nomeh indigenes born between 1980 and 1986, got on a call to share pleasantries and jokes. Laughter filled the atmosphere. The kind of warmth that only old friends can stir swept through every voice on the line, gladdening every heart. Nobody planned for that call to change anything. And yet, it changed everything.",
+  },
+  {
+    heading: "The Idea That Took Root",
+    body: "In the middle of the merriment, someone paused and said something that would outlast the laughter: \"It should not end here.\" That simple thought was all it took. Since everyone on the call was born within the same window of years, 1980 to 1986, it would be beautiful to formalise what already existed between them: form an Age Grade, so that one love could keep growing. The idea landed with warmth and unanimous agreement. The friendship would not remain just a phone call. It would become a movement.",
+  },
+  {
+    heading: "A Name and a Declaration",
+    body: "In the days that followed, a name was adopted: LikeMinds - Ofu Obi Umunwanne. It was more than a name, it was a declaration. Ofu Obi Umunwanne means \"one heart, one brotherhood,\" and it perfectly captured what these men already were to one another. With that name came a sense of responsibility: to channel their collective talent, resources, and passion toward the development of Nomeh Unateze, the community that raised them.",
+  },
+  {
+    heading: "The First of Its Kind",
+    body: "What began as a phone call made history. LikeMinds 1980–1986 became the first known Age Grade group in Nomeh Unateze, and the first formally registered Age Grade with the Corporate Affairs Commission, CAC, in the community, bearing registration number RN. 7810996. Great things rarely begin with grand plans. They begin with people who love each other, who choose not to let a good thing end.",
+  },
+];
 
 const aims = [
   { icon: BuildingIcon, text: "To engage in social and community projects." },
@@ -22,8 +53,8 @@ const aims = [
   { icon: UsersIcon, text: "To maintain and nurture a spirit of brotherhood, patriotism, love and cooperation among members." },
   { icon: ShieldIcon, text: "To defend and protect the rights and interests of the age grade and the entire members wherever they are domiciled." },
   { icon: TargetIcon, text: "To encourage the progress and welfare of the age grade and Nomeh in general." },
-  { icon: HeartIcon, text: "To contribute to peace, unity and progress of the members and their families." },
-  { icon: HeartIcon, text: "To demonstrate empathy, sympathy and benevolence to members in particular and others in need in the community in general." },
+  { icon: SunIcon, text: "To contribute to peace, unity and progress of the members and their families." },
+  { icon: HandHeartIcon, text: "To demonstrate empathy, sympathy and benevolence to members in particular and others in need in the community in general." },
 ];
 
 const coreObjectives = [
@@ -34,329 +65,207 @@ const coreObjectives = [
   { num: "05", title: "Community Development", desc: "To leverage the developmental process of the community by assisting, cooperating, and encouraging the community and town." },
 ];
 
-
+const ROMAN = ["I", "II", "III", "IV"];
 
 export default function AboutPage() {
   return (
-    <div className="pt-16">
-      {/* Hero — distinct dark green + diamond pattern, Emblem-centred */}
-      <section className="relative py-24 bg-green-deep overflow-hidden noise">
-        <div className="absolute inset-0 pattern-diamond pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.36_0.17_152/50%)_0%,transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.17_72/6%)_0%,transparent_60%)]" />
-        <div className="absolute bottom-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/50 to-transparent" />
+    <>
+      <PageHero
+        eyebrow='About Us'
+        title='A brotherhood'
+        accent='built on purpose.'
+        watermark='Umunwanne'
+        description={
+          <>
+            The story of a brotherhood united in love for Nomeh Unateze, and driven by
+            the timeless spirit of{" "}
+            <em className='font-display text-gold'>Ofu Obi Umunwanne</em>.
+          </>
+        }
+      />
 
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col items-center gap-5"
-          >
-            <motion.div variants={scaleIn} className="relative flex items-center justify-center">
-              <motion.div
-                className="absolute opacity-[0.06] pointer-events-none"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-              >
-                <Emblem size={200} className="text-white" />
-              </motion.div>
-              <Emblem size={90} className="text-gold relative z-10" />
-            </motion.div>
+      {/* ── Who we are ─────────────────────────────────────────────── */}
+      <section className='bg-background py-24 sm:py-32'>
+        <div className='mx-auto grid max-w-7xl gap-16 px-4 sm:px-6 lg:grid-cols-12 lg:px-8'>
+          <div className='lg:col-span-7'>
+            <SectionHeading eyebrow='Our story' title='Who we are' accent='& why we exist.' />
+            <Reveal delay={0.1} className='mt-8 space-y-5 text-lg leading-relaxed text-muted-foreground'>
+              <p>
+                The{" "}
+                <strong className='text-foreground'>
+                  Nomeh Unateze Community Development LikeMinds 1980–1986 Association
+                </strong>{" "}
+                is a non-profit, non-political organization of indigenes of Nomeh, a proud
+                community in Enugu State, Nigeria, who were born between the years 1980 and 1986.
+              </p>
+              <p>
+                Bound together by birth, community, and a deep love for our homeland, the
+                members of LikeMinds have solemnly resolved to provide for ourselves a
+                constitution and to be governed by its provisions, channelling our collective
+                energy, resources, and professional expertise toward the development of Nomeh.
+              </p>
+              <p>
+                Our motto — <strong className='text-foreground italic'>Ofu Obi Umunwanne</strong> —
+                captures our founding spirit perfectly. No matter where life has taken us to, we
+                remain one people with one heart for Nomeh.
+              </p>
+            </Reveal>
+          </div>
 
-            <motion.h1 variants={fadeInUp} className="font-sans text-4xl sm:text-5xl md:text-6xl font-bold text-white">
-              About LikeMinds
-            </motion.h1>
-            <motion.p variants={fadeInUp} className="text-white/75 text-lg max-w-2xl leading-relaxed">
-              The story of a brotherhood built on purpose, united in love for Nomeh Unateze, and
-              driven by the timeless spirit of <em className="text-gold font-semibold">Ofu Obi Umunwanne</em>.
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Origin story */}
-      <section className="py-20 bg-background overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={fadeInLeft}
-              className="space-y-6"
-            >
-              <span className=" font-bold tracking-[0.3em] text-primary uppercase">Our Story</span>
-              <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground leading-tight">
-                Who We Are & Why We Exist
-              </h2>
-              <div className="space-y-4 text-muted-foreground leading-relaxed">
-                <p>
-                  The <strong className="text-foreground">Nomeh Unateze Community Development LikeMinds 1980–1986 Association</strong> is
-                  a non-profit, non-political organization of indigenes of Nomeh, a proud community in Enugu State,
-                  Nigeria, who were born between the years 1980 and 1986.
-                </p>
-                <p>
-                  Bound together by birth, community, and a deep love for our homeland, the members of LikeMinds
-                  have solemnly resolved to provide for ourselves a constitution and to be governed by its provisions,
-                  channelling our collective energy, resources, and professional expertise toward the development of Nomeh.
-                </p>
-                <p>
-                  Our motto — <strong className="text-foreground italic">Ofu Obi Umunwanne</strong> — captures our
-                  founding spirit perfectly. No matter where life has taken us to, we remain one people with one heart for Nomeh.
-                </p>
-              </div>
-              <div className="flex items-center gap-3 border-l-4 border-gold pl-5 py-2 bg-gold-muted rounded-r-lg">
-                <BookOpenIcon className="size-5 text-gold shrink-0" />
-                <p className="text-sm text-foreground font-medium italic">
-                  &quot;We do firmly and solemnly resolve to provide for ourselves a constitution and to be governed by the provisions therein contained.&quot;
-                </p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={fadeInRight}
-              className="grid grid-cols-2 gap-4"
-            >
-              {[
-                { label: "Non-Profit", value: "Organization", icon: HeartIcon, color: "text-rose-500", bg: "bg-rose-50 dark:bg-rose-950/40" },
-                { label: "Non-Political", value: "Association", icon: ScaleIcon, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-950/40" },
-                { label: "Age Bracket", value: "1980 – 1986", icon: UsersIcon, color: "text-green-light", bg: "bg-green-50 dark:bg-green-950/40" },
-                { label: "Base", value: "Enugu, Nigeria", icon: BuildingIcon, color: "text-gold", bg: "bg-amber-50 dark:bg-amber-950/40" },
-              ].map((item) => (
-                <div key={item.label} className={`rounded-2xl p-5 ${item.bg} border border-border`}>
-                  <div className={`mb-3 ${item.color}`}><item.icon className="size-5" /></div>
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{item.label}</p>
-                  <p className="font-sans font-bold text-foreground mt-1">{item.value}</p>
-                </div>
+          <div className='flex flex-col gap-5 lg:col-span-5 lg:pt-16'>
+            <div className='grid grid-cols-2 gap-4'>
+              {facts.map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: i * 0.08, ease: EASE }}
+                  className='group rounded-3xl border border-border bg-card p-6 transition-colors duration-500 hover:border-clay/40'>
+                  <span className='grid size-11 place-items-center rounded-2xl bg-clay-muted text-clay transition-transform duration-500 group-hover:-rotate-6'>
+                    <item.icon className='size-5' />
+                  </span>
+                  <p className='eyebrow mt-5 text-[0.65rem] text-muted-foreground'>{item.label}</p>
+                  <p className='font-display mt-1 text-lg font-medium text-foreground'>{item.value}</p>
+                </motion.div>
               ))}
-            </motion.div>
+            </div>
+            <Reveal delay={0.3} className='relative overflow-hidden rounded-3xl bg-green-deep p-7 text-white'>
+              <div className='pattern-nsibidi absolute inset-0 opacity-60' />
+              <div className='relative flex gap-4'>
+                <BookOpenIcon className='mt-1 size-5 shrink-0 text-gold' />
+                <p className='font-display text-lg leading-relaxed italic text-white/90'>
+                  &ldquo;We do firmly and solemnly resolve to provide for ourselves a constitution
+                  and to be governed by the provisions therein contained.&rdquo;
+                </p>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* Emblem separator */}
-      <div className="flex items-center gap-4 max-w-7xl mx-auto px-8 py-2">
-        <div className="flex-1 h-px bg-linear-to-r from-transparent via-gold/40 to-transparent" />
-        <Emblem size={32} variant="icon" className="text-gold opacity-50" />
-        <div className="flex-1 h-px bg-linear-to-l from-transparent via-gold/40 to-transparent" />
-      </div>
+      {/* ── How it began ───────────────────────────────────────────── */}
+      <section className='relative overflow-hidden bg-clay-muted/60 py-24 sm:py-32 dark:bg-clay-muted/40'>
+        <UliBand className='absolute inset-x-0 top-0 text-clay/40' height={8} />
+        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+          <SectionHeading
+            align='center'
+            eyebrow='Our beginning'
+            title='How LikeMinds'
+            accent='began.'
+            description='A phone call. A shared laugh. A decision that made history.'
+          />
 
-      {/* Founding History */}
-      <section className="py-20 bg-muted/30 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={fadeInUp}
-            className="text-center mb-14"
-          >
-            <span className="font-bold tracking-[0.3em] text-primary uppercase">Our Beginning</span>
-            <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground mt-2">
-              How LikeMinds Began
-            </h2>
-            <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-              A phone call. A shared laugh. A decision that made history.
-            </p>
-            <div className="w-12 h-0.5 bg-gold mx-auto mt-4 rounded-full" />
-          </motion.div>
+          <Reveal className='mx-auto mt-16 max-w-4xl text-center'>
+            <ScrollHighlight
+              text='“It should not end here. Since we are all within 1980 to 1986, let us form an Age Grade so we can keep the spirit, one love, growing.”'
+              className='font-display justify-center text-3xl leading-snug font-medium text-foreground italic sm:text-4xl'
+            />
+            <p className='eyebrow mt-6 text-clay'>— The suggestion that started it all, May 2024</p>
+          </Reveal>
 
-          <div className="max-w-4xl mx-auto">
-            {/* Pull quote */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              variants={scaleIn}
-              className="relative bg-green-deep rounded-3xl px-8 py-10 md:px-14 md:py-12 mb-12 overflow-hidden noise"
-            >
-              <div className="absolute inset-0 pattern-diamond pointer-events-none opacity-60" />
-              <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/50 to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/30 to-transparent" />
-              <div className="relative z-10 text-center">
-                <span className="text-gold/30 font-sans font-black text-8xl leading-none select-none absolute -top-2 left-6">&ldquo;</span>
-                <p className="text-white/90 text-xl sm:text-2xl font-semibold leading-relaxed italic relative z-10 px-4">
-                  It should not end here. Since we are all within 1980 to 1986, let us form an Age Grade so we can keep the spirit, one love, growing.
-                </p>
-                <p className="text-gold/70 text-sm font-bold tracking-widest uppercase mt-5">
-                  — The suggestion that started it all, May 2024
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Narrative */}
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              className="space-y-6"
-            >
-              {[
-                {
-                  heading: "A Call That Was Never Meant to Be Historic",
-                  body: "Sometime in May 2024, a few friends, Nomeh indigenes born between 1980 and 1986, got on a call to share pleasantries and jokes. Laughter filled the atmosphere. The kind of warmth that only old friends can stir swept through every voice on the line, gladdening every heart. Nobody planned for that call to change anything. And yet, it changed everything.",
-                },
-                {
-                  heading: "The Idea That Took Root",
-                  body: "In the middle of the merriment, someone paused and said something that would outlast the laughter: \"It should not end here.\" That simple thought was all it took. Since everyone on the call was born within the same window of years, 1980 to 1986, it would be beautiful to formalise what already existed between them: form an Age Grade, so that one love could keep growing. The idea landed with warmth and unanimous agreement. The friendship would not remain just a phone call. It would become a movement.",
-                },
-                {
-                  heading: "A Name and a Declaration",
-                  body: "In the days that followed, a name was adopted: LikeMinds - Ofu Obi Umunwanne. It was more than a name, it was a declaration. Ofu Obi Umunwanne means \"one heart, one brotherhood,\" and it perfectly captured what these men already were to one another. With that name came a sense of responsibility: to channel their collective talent, resources, and passion toward the development of Nomeh Unateze, the community that raised them.",
-                },
-                {
-                  heading: "The First of Its Kind",
-                  body: "What began as a phone call made history. LikeMinds 1980–1986 became the first known Age Grade group in Nomeh Unateze, and the first formally registered Age Grade with the Corporate Affairs Commission, CAC, in the community, bearing registration number RN. 7810996. Great things rarely begin with grand plans. They begin with people who love each other, who choose not to let a good thing end.",
-                },
-              ].map((item, i) => (
+          {/* Chapters timeline */}
+          <div className='relative mx-auto mt-20 max-w-4xl'>
+            <div className='absolute top-0 bottom-0 left-6 w-px bg-linear-to-b from-clay/60 via-clay/30 to-transparent sm:left-1/2' />
+            <div className='space-y-12'>
+              {chapters.map((item, i) => (
                 <motion.div
-                  key={i}
-                  variants={fadeInUp}
-                  className="flex gap-5 bg-card rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-md transition-all duration-300"
-                >
-                  <div className="shrink-0 w-1 rounded-full bg-linear-to-b from-gold/80 to-gold/20 self-stretch" />
-                  <div>
-                    <h3 className="font-sans font-bold text-foreground mb-2">{item.heading}</h3>
-                    <p className="text-base text-muted-foreground leading-relaxed">{item.body}</p>
+                  key={item.heading}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.9, ease: EASE }}
+                  className={`relative grid gap-6 pl-16 sm:grid-cols-2 sm:gap-12 sm:pl-0 ${
+                    i % 2 === 1 ? "sm:[&>div]:col-start-2" : ""
+                  }`}>
+                  <span className='font-display absolute top-0 left-0 grid size-12 place-items-center rounded-full border border-clay/40 bg-background text-lg text-clay italic sm:left-1/2 sm:-translate-x-1/2'>
+                    {ROMAN[i]}
+                  </span>
+                  <div className={`rounded-3xl border border-border bg-card p-7 shadow-[0_20px_50px_-30px_oklch(0.4_0.08_45/35%)] ${i % 2 === 0 ? "sm:mr-6" : "sm:ml-6"}`}>
+                    <p className='eyebrow text-clay'>Chapter {ROMAN[i]}</p>
+                    <h3 className='font-display mt-3 text-2xl leading-snug font-medium text-foreground'>
+                      {item.heading}
+                    </h3>
+                    <p className='mt-3 leading-relaxed text-muted-foreground'>{item.body}</p>
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
-
-            {/* Closing statement */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              className="mt-10 text-center"
-            >
-              <div className="flex items-center gap-3 justify-center mb-4">
-                <div className="h-px w-16 bg-linear-to-r from-transparent to-gold/60" />
-                <span className="text-gold text-[9px]">◆</span>
-                <div className="h-px w-16 bg-linear-to-l from-transparent to-gold/60" />
-              </div>
-              <p className="text-foreground font-semibold italic text-lg">Ofu Obi Umunwanne.</p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Emblem separator */}
-      <div className="flex items-center gap-4 max-w-7xl mx-auto px-8 py-2">
-        <div className="flex-1 h-px bg-linear-to-r from-transparent via-gold/40 to-transparent" />
-        <Emblem size={32} variant="icon" className="text-gold opacity-50" />
-        <div className="flex-1 h-px bg-linear-to-l from-transparent via-gold/40 to-transparent" />
-      </div>
-
-      {/* Aims & Objectives */}
-      <section id="objectives" className="py-20 bg-muted/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={fadeInUp}
-            className="text-center mb-14"
-          >
-            <span className=" font-bold tracking-[0.3em] text-primary uppercase">Our Mandate</span>
-            <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground mt-2">
-              Aims & Objectives
-            </h2>
-            <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
-              The aims and objectives of the Association shall include but are not limited to:
-            </p>
-            <div className="w-12 h-0.5 bg-gold mx-auto mt-4 rounded-full" />
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            className="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 max-w-4xl mx-auto"
-          >
-            {aims.map((aim, i) => (
-              <motion.div
-                key={i}
-                variants={fadeInUp}
-                className="flex items-start gap-4 bg-card rounded-xl border border-border p-5 hover:border-primary/30 hover:shadow-md transition-all duration-200"
-              >
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <aim.icon className="size-4 text-primary" />
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{aim.text}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Emblem separator */}
-      <div className="flex items-center gap-4 max-w-7xl mx-auto px-8 py-2">
-        <div className="flex-1 h-px bg-linear-to-r from-transparent via-gold/40 to-transparent" />
-        <Emblem size={32} variant="icon" className="text-gold opacity-50" />
-        <div className="flex-1 h-px bg-linear-to-l from-transparent via-gold/40 to-transparent" />
-      </div>
-
-      {/* Core Objectives — vertical timeline layout */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={fadeInUp}
-            className="text-center mb-14"
-          >
-            <span className="text-xs font-bold tracking-[0.3em] text-primary uppercase">Our Mission</span>
-            <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground mt-2">
-              Core Objectives
-            </h2>
-            <div className="w-12 h-0.5 bg-gold mx-auto mt-4 rounded-full" />
-          </motion.div>
-
-          <div className="max-w-3xl mx-auto">
-            {/* Gold left rail */}
-            <div className="relative">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-linear-to-b from-gold/60 via-gold/30 to-transparent" />
-
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-40px" }}
-                className="space-y-6"
-              >
-                {coreObjectives.map((obj, i) => (
-                  <motion.div
-                    key={obj.num}
-                    variants={timelineItem}
-                    className="flex gap-6 relative"
-                  >
-                    {/* Gold circle badge */}
-                    <div className="w-12 h-12 rounded-full bg-green-deep border-2 border-gold/60 flex items-center justify-center shrink-0 z-10 shadow-lg">
-                      <span className="text-gold font-black font-sans text-sm">{obj.num}</span>
-                    </div>
-                    {/* Content card */}
-                    <div className="flex-1 bg-card rounded-2xl border border-border p-5 hover:border-gold/30 hover:shadow-lg transition-all duration-300 mb-0">
-                      <h3 className="font-sans font-bold text-foreground mb-1.5">{obj.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{obj.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
             </div>
           </div>
+
+          <Reveal className='mt-16 flex flex-col items-center gap-4 text-clay'>
+            <DiamondRule />
+            <p className='font-display text-2xl text-foreground italic'>Ofu Obi Umunwanne.</p>
+          </Reveal>
         </div>
       </section>
 
-      
-    </div>
+      {/* ── Aims & objectives ──────────────────────────────────────── */}
+      <section id='objectives' className='scroll-mt-24 bg-background py-24 sm:py-32'>
+        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+          <SectionHeading
+            align='center'
+            eyebrow='Our mandate'
+            title='Aims &'
+            accent='objectives.'
+            description='The aims and objectives of the Association shall include but are not limited to:'
+          />
+
+          <div className='mx-auto mt-16 grid max-w-5xl gap-4 sm:grid-cols-2'>
+            {aims.map((aim, i) => (
+              <motion.div
+                key={aim.text}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.7, delay: (i % 2) * 0.08, ease: EASE }}
+                className='group flex items-start gap-5 rounded-3xl border border-border bg-card p-6 transition-all duration-500 hover:-translate-y-0.5 hover:border-primary/30'>
+                <span className='grid size-11 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary transition-colors duration-500 group-hover:bg-primary group-hover:text-primary-foreground'>
+                  <aim.icon className='size-5' />
+                </span>
+                <p className='leading-relaxed text-muted-foreground'>{aim.text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Core objectives ────────────────────────────────────────── */}
+      <section className='noise relative overflow-hidden bg-green-deep py-24 sm:py-32'>
+        <div className='pattern-nsibidi pointer-events-none absolute inset-0 opacity-50' />
+        <div className='relative z-10 mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:px-8'>
+          <div className='lg:col-span-5'>
+            <div className='lg:sticky lg:top-32'>
+              <SectionHeading
+                tone='dark'
+                eyebrow='Our mission'
+                title='Five commitments'
+                accent='we live by.'
+                description='The core objectives written into our constitution — the measure against which every project is judged.'
+              />
+            </div>
+          </div>
+          <ol className='space-y-4 lg:col-span-7'>
+            {coreObjectives.map((obj, i) => (
+              <motion.li
+                key={obj.num}
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.8, delay: i * 0.05, ease: EASE }}
+                className='group flex gap-6 rounded-3xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur-sm transition-colors duration-500 hover:border-gold/40 hover:bg-white/[0.07]'>
+                <span className='font-display text-4xl leading-none text-gold/40 transition-colors duration-500 group-hover:text-gold'>
+                  {obj.num}
+                </span>
+                <div>
+                  <h3 className='font-display text-xl font-medium text-white'>{obj.title}</h3>
+                  <p className='mt-2 leading-relaxed text-white/60'>{obj.desc}</p>
+                </div>
+              </motion.li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    </>
   );
 }

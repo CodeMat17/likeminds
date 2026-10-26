@@ -24,7 +24,7 @@ export const members: Member[] = [
     bio: "Matthew is a seasoned Senior Software Developer with over 13+ years of hands-on experience in developing and delivering robust software solutions. Currently serving as a public servant in Abuja, he combines technical expertise with a strong commitment to public service and national development.",
     photo: "/membersPhotos/matthew.jpeg",
     social: { email: "email@matthewchukwu.com" },
-    website: "https://www.matthewchukwu.com",
+    website: "https://www.matthewchukwu.dev",
   },
   {
     id: "2",
@@ -318,3 +318,36 @@ export const members: Member[] = [
     website: "",
   },
 ];
+
+// ─── Executive ordering ──────────────────────────────────────────────────────
+const POSITION_ORDER = [
+  "chairman",
+  "vice-chairman",
+  "secretary",
+  "assistant-secretary",
+  "treasurer",
+  "financial-secretary",
+  "public-relations",
+  "provost",
+  "welfare-officer",
+  "legal-adviser",
+];
+
+export function positionRank(position: string): number {
+  const normalized = position.toLowerCase().trim().replace(/\s+/g, "-");
+  if (normalized === "member") return POSITION_ORDER.length + 1;
+  const idx = POSITION_ORDER.indexOf(normalized);
+  return idx === -1 ? POSITION_ORDER.length : idx;
+}
+
+export const isExecutive = (m: Member) => positionRank(m.position) < POSITION_ORDER.length;
+
+// Executives in office order, then members alphabetically
+export const sortedMembers = [...members].sort((a, b) => {
+  const ra = positionRank(a.position);
+  const rb = positionRank(b.position);
+  if (ra !== rb) return ra - rb;
+  return a.name.localeCompare(b.name);
+});
+
+export const executives = sortedMembers.filter(isExecutive);

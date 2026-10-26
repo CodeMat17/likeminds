@@ -1,110 +1,82 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRightIcon, MailIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { staggerContainer, heroText } from "@/lib/animations";
-import { Emblem } from "@/components/ui/Emblem";
+import Image from "next/image";
+import { ArrowUpRightIcon, CheckIcon, MailIcon } from "lucide-react";
+import { Reveal, WordReveal } from "@/components/motion/Reveal";
+import { Magnetic } from "@/components/motion/Magnetic";
+import { RotatingSeal, UliBand } from "@/components/ui/Ornaments";
+
+const criteria = ["Male indigene of Nomeh Unateze", "Good character", "Born 1980 – 1986"];
 
 export function CTASection() {
   return (
-    <section className="relative py-28 overflow-hidden noise">
-      {/* Deep green background with layered glows */}
-      <div className="absolute inset-0 bg-green-deep">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_30%_50%,oklch(0.36_0.17_152/35%)_0%,transparent_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_80%_50%,oklch(0.74_0.17_72/10%)_0%,transparent_100%)]" />
-      </div>
+    <section className='noise relative overflow-hidden bg-clay py-24 text-white sm:py-32 dark:bg-clay-muted'>
+      <div className='pattern-diamond pointer-events-none absolute inset-0 opacity-70' />
+      <div className='pointer-events-none absolute -top-32 -left-32 size-[30rem] rounded-full bg-gold/30 blur-[130px]' />
+      <div className='pointer-events-none absolute -right-20 -bottom-40 size-[34rem] rounded-full bg-green-deep/50 blur-[140px]' />
+      <UliBand className='absolute inset-x-0 top-0 text-white/30' height={10} />
 
-      {/* Igbo uli diamond pattern */}
-      <div className="absolute inset-0 pattern-diamond pointer-events-none" />
+      <div className='relative z-10 mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:px-8'>
+        <div className='lg:col-span-8'>
+          <Reveal y={12} className='eyebrow text-gold-light'>
+            Join the brotherhood
+          </Reveal>
+          <h2 className='font-display mt-5 text-4xl leading-[1.05] font-medium sm:text-5xl lg:text-6xl'>
+            <WordReveal
+              segments={[
+                { text: "Are you a son of Nomeh Unateze,", br: true },
+                { text: "born 1980–1986?", className: "italic font-display-wonk text-gold-light" },
+              ]}
+            />
+          </h2>
+          <Reveal delay={0.15} className='mt-6 max-w-2xl text-lg leading-relaxed text-white/80'>
+            If you are a male indigene of Nomeh Unateze with unquestionable character,
+            born between 1980 and 1986, we warmly invite you to join your brothers in the
+            LikeMinds family — and uphold the spirit of{" "}
+            <em className='font-display text-white'>Ofu Obi Umunwanne</em>.
+          </Reveal>
 
-      {/* Top & bottom gold rule */}
-      <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/50 to-transparent" />
-      <div className="absolute bottom-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/30 to-transparent" />
-
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        {/* Gradient-border frame around the entire CTA content */}
-        <div className="gradient-border-static rounded-3xl p-10 md:p-16 bg-transparent">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            className="flex flex-col items-center gap-6"
-          >
-            {/* Floating Emblem — richer than the plain logo */}
-            <motion.div variants={heroText}>
-              <div className="p-3 rounded-full bg-white/8 border border-white/12 backdrop-blur-sm">
-                <motion.div
-                  animate={{ rotate: [0, 5, 0, -5, 0] }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <Emblem size={100} className="text-gold" />
-                </motion.div>
-              </div>
-            </motion.div>
-
-            <motion.p variants={heroText} className="text-[11px] font-bold tracking-[0.35em] text-gold/70 uppercase">
-              Join the Brotherhood
-            </motion.p>
-
-            <motion.h2
-              variants={heroText}
-              className="font-sans text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight"
-            >
-              Are you a male indigene of Nomeh Unateze{" "}
-              <br className="hidden sm:block" />
-              <span className="text-gradient-gold animate-shimmer">
-                born between 1980–1986?
+          <Reveal delay={0.25} className='mt-8 flex flex-wrap gap-2.5'>
+            {criteria.map((c) => (
+              <span
+                key={c}
+                className='inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur-sm'>
+                <CheckIcon className='size-3.5 text-gold-light' />
+                {c}
               </span>
-            </motion.h2>
+            ))}
+          </Reveal>
 
-            {/* Gold separator */}
-            <motion.div
-              variants={heroText}
-              className="flex items-center gap-3"
-            >
-              <div className="h-px w-16 bg-linear-to-r from-transparent to-gold/60" />
-              <span className="text-gold text-[9px]">◆</span>
-              <div className="h-px w-16 bg-linear-to-l from-transparent to-gold/60" />
-            </motion.div>
-
-            <motion.p
-              variants={heroText}
-              className="text-white/65 text-lg max-w-2xl leading-relaxed"
-            >
-              If you are a male indigene of Nomeh Unateze with unquestionable character, born between 1980
-              and 1986, we warmly invite you to join your brothers in the LikeMinds family.
-              Together, let us continue to build our community and uphold the spirit of{" "}
-              <em className="text-white/90 font-semibold not-italic">Ofu Obi Umunwanne</em>.
-            </motion.p>
-
-            <motion.div variants={heroText} className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Button
-                asChild
-                size="lg"
-                className="bg-gold hover:bg-gold/90 text-green-deep font-bold text-base px-10 rounded-full shadow-lg shadow-gold/20 hover:shadow-gold/35 hover:shadow-xl transition-all duration-300"
-              >
-                <Link href="/join">
-                  Apply for Membership
-                  <ArrowRightIcon className="size-4 ml-1" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/35 font-semibold text-base px-10 rounded-full transition-all duration-300"
-              >
-                <a href="mailto:info@likeminds-nomeh.org">
-                  <MailIcon className="size-4 mr-1" />
-                  Contact Us
-                </a>
-              </Button>
-            </motion.div>
-          </motion.div>
+          <Reveal delay={0.35} className='mt-10 flex flex-col gap-4 sm:flex-row sm:items-center'>
+            <Magnetic>
+              <Link
+                href='/join'
+                className='group inline-flex h-14 items-center gap-3 rounded-full bg-white pr-2 pl-7 text-base font-bold text-green-deep transition-colors duration-300 hover:bg-gold-light'>
+                Apply for membership
+                <span className='grid size-10 place-items-center rounded-full bg-green-deep text-gold transition-transform duration-500 group-hover:rotate-45'>
+                  <ArrowUpRightIcon className='size-4' />
+                </span>
+              </Link>
+            </Magnetic>
+            <Link
+              href='/contact'
+              className='inline-flex h-14 items-center gap-2 rounded-full border border-white/30 px-7 font-semibold transition-colors duration-300 hover:bg-white/10'>
+              <MailIcon className='size-4' />
+              Ask us a question
+            </Link>
+          </Reveal>
         </div>
+
+        <Reveal delay={0.2} className='hidden justify-center lg:col-span-4 lg:flex'>
+          <RotatingSeal
+            text='ONE HEART • ONE BROTHERHOOD • OFU OBI UMUNWANNE • '
+            className='size-72 text-white/80'>
+            <div className='grid size-44 place-items-center rounded-full border border-white/20 bg-green-deep/40 backdrop-blur-md'>
+              <Image src='/logo.png' alt='' width={110} height={110} className='animate-float' />
+            </div>
+          </RotatingSeal>
+        </Reveal>
       </div>
     </section>
   );

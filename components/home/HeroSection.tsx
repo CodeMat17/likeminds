@@ -1,316 +1,305 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
+  AnimatePresence,
   motion,
   useScroll,
   useTransform,
-  useMotionValue,
-  useSpring,
-  useMotionTemplate,
 } from "framer-motion";
-import { UsersIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { Emblem } from "@/components/ui/Emblem";
+import { ArrowRightIcon, ArrowUpRightIcon } from "lucide-react";
+import { executives, members, sortedMembers } from "@/lib/data/members";
+import { WordReveal } from "@/components/motion/Reveal";
+import { Magnetic } from "@/components/motion/Magnetic";
+import { Marquee } from "@/components/ui/Marquee";
+import { RotatingSeal, UliBand } from "@/components/ui/Ornaments";
 
-// "LIKE" = weight 400 + white  |  "MINDS" = weight 900 + gold
-const LIKE  = "LIKE".split("");
-const MINDS = "MINDS".split("");
-
-const TICKER_TEXT = [
-  "BROTHERHOOD",
-  "UNITY",
-  "COMMUNITY DEVELOPMENT",
-  "OFU OBI UMUNWANNE",
-  "EST. 2024",
-  "ENUGU, NIGERIA",
-  "AGE GRADE ASSOCIATION",
-  "NOMEH UNATEZE",
+const TICKER = [
+  "Brotherhood",
+  "Unity",
+  "Community Development",
+  "Ofu Obi Umunwanne",
+  "Est. 2024",
+  "Enugu, Nigeria",
+  "Age Grade Association",
+  "Nomeh Unateze",
 ];
 
-// 4 copies for seamless -50% loop
-const TICKER_LOOP = [...TICKER_TEXT, ...TICKER_TEXT, ...TICKER_TEXT, ...TICKER_TEXT];
+const EASE = [0.16, 1, 0.3, 1] as const;
+const ROTATE_MS = 4200;
 
-type BlobConfig = {
-  cx: string; cy: string; size: number;
-  color: string; duration: number; delay: number;
-};
-
-const BLOBS: BlobConfig[] = [
-  { cx: "15%", cy: "30%", size: 560, color: "oklch(0.28 0.12 152 / 60%)", duration: 20, delay: 0 },
-  { cx: "78%", cy: "68%", size: 450, color: "oklch(0.74 0.17 72 / 10%)",  duration: 24, delay: 6 },
-];
-
-const STATS = [
-  { value: "24+",  label: "Members"      },
-  { value: "3+",   label: "Projects"     },
-  { value: "3+",   label: "Years"        },
-  { value: "5K+",  label: "Lives Touched"},
-];
-
-// Shared spring config for the stagger reveal
-const SPRING = [0.22, 1, 0.36, 1] as const;
+const avatarStack = sortedMembers.slice(executives.length, executives.length + 5);
+const at = (i: number) => sortedMembers[i % sortedMembers.length];
 
 export function HeroSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
+  const [active, setActive] = useState(0);
+
+  // Restarts on every change, so a thumbnail click gets a full turn on screen
+  useEffect(() => {
+    const id = setTimeout(
+      () => setActive((i) => (i + 1) % sortedMembers.length),
+      ROTATE_MS,
+    );
+    return () => clearTimeout(id);
+  }, [active]);
 
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: ref,
     offset: ["start start", "end start"],
   });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const scrollOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 140]);
+  const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const mainY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const sideAY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const sideBY = useTransform(scrollYProgress, [0, 1], [0, 160]);
 
-  // Mouse-following glow (desktop only) — brand gold instead of blue
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 60, damping: 25 });
-  const springY = useSpring(mouseY, { stiffness: 60, damping: 25 });
-  const glowBg = useMotionTemplate`radial-gradient(600px circle at ${springX}px ${springY}px, oklch(0.74 0.17 72 / 6%), transparent 70%)`;
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [mouseX, mouseY]);
+  const current = at(active);
+  // The two side frames preview who is up next
+  const upNext = [
+    { member: at(active + 1), offset: 1 },
+    { member: at(active + 2), offset: 2 },
+  ];
 
   return (
     <section
-      ref={containerRef}
-      className="relative min-h-screen flex flex-col bg-green-deep noise">
+      ref={ref}
+      className='noise relative flex min-h-svh flex-col overflow-hidden bg-green-deep lg:h-svh lg:min-h-160'>
+      {/* Ground: uli motifs, warm glows */}
+      <div className='pattern-nsibidi pointer-events-none absolute inset-0 opacity-80' />
+      <div className='pointer-events-none absolute top-1/4 -left-40 size-[40rem] rounded-full bg-green-mid/40 blur-[150px]' />
+      <div className='pointer-events-none absolute -right-20 bottom-0 size-[36rem] rounded-full bg-clay/30 blur-[150px]' />
+      <div className='pointer-events-none absolute top-10 right-1/3 size-80 rounded-full bg-gold/10 blur-[110px]' />
 
-      {/* ── Igbo uli chevron pattern ───────────────── */}
-      <div className="absolute inset-0 pattern-uli pointer-events-none opacity-100" />
+      <div className='relative z-10 mx-auto grid w-full max-w-7xl flex-1 items-center gap-14 px-4 pt-32 pb-36 sm:px-6 lg:min-h-0 lg:grid-cols-12 lg:gap-8 lg:px-8 lg:pt-24 lg:pb-20'>
+        {/* ── Copy ─────────────────────────────── */}
+        <motion.div style={{ y: textY, opacity: fade }} className='lg:col-span-7'>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
+            className='inline-flex items-center gap-2.5 rounded-full border border-white/12 bg-white/5 py-1.5 pr-4 pl-2 text-xs text-white/75 backdrop-blur-sm'>
+            <span className='relative flex size-2'>
+              <span className='absolute inline-flex size-full animate-ping rounded-full bg-gold opacity-60' />
+              <span className='relative inline-flex size-2 rounded-full bg-gold' />
+            </span>
+            CAC Registered · RN. 7810996
+          </motion.div>
 
-      {/* ── Animated background blobs ───────────────── */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div className="absolute inset-0 will-change-transform" style={{ y: bgY }}>
-          {BLOBS.map((blob, idx) => (
-            <motion.div
-              key={idx}
-              className="absolute rounded-full will-change-transform"
-              style={{
-                left: `calc(${blob.cx} - ${blob.size / 2}px)`,
-                top: `calc(${blob.cy} - ${blob.size / 2}px)`,
-                width: blob.size,
-                height: blob.size,
-                background: blob.color,
-                filter: "blur(80px)",
-              }}
-              animate={{
-                x: [0, 30, -18, 0],
-                y: [0, -20, 14, 0],
-              }}
-              transition={{
-                duration: blob.duration,
-                delay: blob.delay,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
+          <h1 className='font-display mt-7 text-[3.4rem] leading-[0.98] font-medium tracking-tight text-white sm:text-7xl lg:mt-[clamp(1rem,3svh,1.75rem)] lg:text-[clamp(3.5rem,10svh,5.6rem)]'>
+            <WordReveal
+              animateOnMount
+              delay={0.25}
+              stagger={0.08}
+              segments={[
+                { text: "One heart.", br: true },
+                { text: "One brotherhood.", className: "italic font-display-wonk text-gradient-warm" },
+              ]}
             />
-          ))}
+          </h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.75, ease: EASE }}
+            className='mt-7 max-w-xl text-lg leading-relaxed text-white/65 lg:mt-[clamp(1rem,3svh,1.75rem)]'>
+            <span className='font-semibold text-white'>LikeMinds 1980–1986</span> is the
+            age grade of Nomeh Unateze — sons of one soil, building capacity, empowering
+            youth and championing welfare under one vow:{" "}
+            <em className='font-display text-gold'>Ofu Obi Umunwanne</em>.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.9, ease: EASE }}
+            className='mt-10 flex flex-col gap-4 sm:flex-row sm:items-center lg:mt-[clamp(1.25rem,4svh,2.5rem)]'>
+            <Magnetic>
+              <Link
+                href='/join'
+                className='group inline-flex h-14 items-center gap-3 rounded-full bg-gold pr-2 pl-7 text-base font-bold text-green-deep shadow-[0_18px_50px_-15px_oklch(0.72_0.135_74/70%)] transition-colors duration-300 hover:bg-gold-light'>
+                Join the Brotherhood
+                <span className='grid size-10 place-items-center rounded-full bg-green-deep text-gold transition-transform duration-500 group-hover:rotate-45'>
+                  <ArrowUpRightIcon className='size-4' />
+                </span>
+              </Link>
+            </Magnetic>
+            <Link
+              href='/members'
+              className='group inline-flex h-14 items-center gap-2 px-2 text-base font-semibold text-white/85 transition-colors hover:text-white'>
+              <span className='bg-linear-to-r from-gold to-gold bg-[length:30%_1px] bg-left-bottom bg-no-repeat pb-1 transition-[background-size] duration-500 group-hover:bg-[length:100%_1px]'>
+                Meet our members
+              </span>
+              <ArrowRightIcon className='size-4 transition-transform duration-300 group-hover:translate-x-1' />
+            </Link>
+          </motion.div>
+
+          {/* Avatar stack */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.1 }}
+            className='mt-12 flex items-center gap-4 lg:mt-[clamp(1.25rem,4.5svh,3rem)] [@media(min-width:1024px)_and_(max-height:700px)]:hidden'>
+            <div className='flex -space-x-3'>
+              {avatarStack.map((m) => (
+                <Image
+                  key={m.id}
+                  src={m.photo}
+                  alt={m.name}
+                  width={44}
+                  height={44}
+                  className='size-11 rounded-full object-cover object-top ring-2 ring-green-deep'
+                />
+              ))}
+            </div>
+            <p className='text-sm leading-snug text-white/55'>
+              <span className='font-display text-xl font-semibold text-white'>
+                {members.length}
+              </span>{" "}
+              sons of Nomeh Unateze,
+              <br />
+              bound by one vow.
+            </p>
+          </motion.div>
         </motion.div>
-        {/* Bottom vignette — not inside parallax, stays fixed at bottom edge */}
-        <div className="absolute bottom-0 inset-x-0 h-40 bg-linear-to-b from-transparent to-green-deep" />
+
+        {/* ── Portrait collage ─────────────────── */}
+        <div className='relative mx-auto h-[30rem] w-full max-w-md sm:h-[34rem] lg:col-span-5 lg:h-[min(38rem,calc(100svh-13rem))] lg:max-w-none'>
+          {/* Rotating member portrait */}
+          <motion.div
+            style={{ y: mainY }}
+            initial={{ opacity: 0, y: 60, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1.3, delay: 0.3, ease: EASE }}
+            className='absolute inset-x-[14%] top-0 bottom-[8%]'>
+            <div className='relative size-full overflow-hidden rounded-lg border border-gold/30 bg-green-mid/30 shadow-[0_40px_80px_-30px_black]'>
+              <AnimatePresence initial={false}>
+                <motion.div
+                  key={current.id}
+                  initial={{ opacity: 0, scale: 1.08 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.4, ease: EASE }}
+                  className='absolute inset-0'>
+                  <Image
+                    src={current.photo}
+                    alt={current.name}
+                    fill
+                    priority={active === 0}
+                    sizes='(max-width: 1024px) 70vw, 30vw'
+                    className='object-cover object-top'
+                  />
+                </motion.div>
+              </AnimatePresence>
+              <div className='absolute inset-0 bg-linear-to-t from-green-deep via-green-deep/10 to-transparent' />
+              <div className='absolute inset-x-0 bottom-0 p-6 text-center'>
+                <AnimatePresence mode='wait'>
+                  <motion.div
+                    key={current.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.5, ease: EASE }}>
+                    <p className='eyebrow text-gold'>{current.position}</p>
+                    <p className='font-display mt-1.5 text-xl leading-tight text-white'>
+                      {current.name}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+                {/* Counter + progress toward the next portrait */}
+                <div className='mx-auto mt-4 flex max-w-[12rem] items-center gap-3'>
+                  <span className='text-[11px] font-bold text-white/70 tabular-nums'>
+                    {String(active + 1).padStart(2, "0")}
+                  </span>
+                  <span className='relative h-0.5 flex-1 overflow-hidden rounded-full bg-white/20'>
+                    <motion.span
+                      key={active}
+                      className='absolute inset-y-0 left-0 rounded-full bg-gold'
+                      initial={{ width: "0%" }}
+                      animate={{ width: "100%" }}
+                      transition={{ duration: ROTATE_MS / 1000, ease: "linear" }}
+                    />
+                  </span>
+                  <span className='text-[11px] font-bold text-white/40 tabular-nums'>
+                    {String(sortedMembers.length).padStart(2, "0")}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Up-next thumbnails: click to jump ahead */}
+          {upNext.map(({ member, offset }) => (
+            <motion.div
+              key={offset}
+              style={{ y: offset === 1 ? sideAY : sideBY }}
+              initial={{ opacity: 0, x: offset === 1 ? -30 : 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.2, delay: 0.55 + offset * 0.15, ease: EASE }}
+              className={
+                offset === 1
+                  ? "absolute top-[12%] left-0 w-[30%]"
+                  : "absolute right-0 bottom-[22%] w-[28%]"
+              }>
+              <button
+                onClick={() => setActive((i) => (i + offset) % sortedMembers.length)}
+                aria-label={`Show ${member.name}`}
+                className='group relative block aspect-[3/4] w-full overflow-hidden rounded-lg border-4 border-green-deep bg-green-mid/40 shadow-2xl'>
+                <AnimatePresence initial={false}>
+                  <motion.div
+                    key={member.id}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1.1, ease: EASE }}
+                    className='absolute inset-0'>
+                    <Image
+                      src={member.photo}
+                      alt=''
+                      fill
+                      sizes='160px'
+                      className='object-cover object-top sepia-[0.35] transition-[filter] duration-500 group-hover:sepia-0'
+                    />
+                  </motion.div>
+                </AnimatePresence>
+                <span className='absolute inset-x-0 bottom-0 bg-linear-to-t from-green-deep/90 to-transparent px-2 pt-6 pb-2 text-left text-[9px] font-bold tracking-[0.2em] text-gold uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+                  {offset === 1 ? "Up next" : "Then"}
+                </span>
+              </button>
+            </motion.div>
+          ))}
+
+          {/* Seal */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.6, rotate: -40 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 1.4, delay: 1, ease: EASE }}
+            className='absolute top-[2%] right-[2%]'>
+            <RotatingSeal className='size-28 rounded-full bg-green-deep/80 text-gold backdrop-blur-md sm:size-32'>
+              <Image src='/logo.png' alt='' width={56} height={56} className='size-11 sm:size-13' />
+            </RotatingSeal>
+          </motion.div>
+        </div>
       </div>
 
-      {/* ── Cursor glow (desktop only) ──────────────── */}
-      <motion.div
-        className="fixed inset-0 pointer-events-none hidden md:block"
-        style={{ background: glowBg }}
-      />
-
-      {/* ── Main content ────────────────────────────── */}
-      <div className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 sm:px-6 pt-24 pb-36">
-        {/* Registration badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-          className="flex items-center gap-3 mb-6">
-          <div className="hidden sm:block h-px w-12 bg-linear-to-r from-transparent to-gold/60" />
-          <span className="text-[10px] font-bold tracking-[0.25em] sm:tracking-[0.35em] text-gold/70 uppercase">
-            RN. 7810996
-          </span>
-          <div className="hidden sm:block h-px w-12 bg-linear-to-l from-transparent to-gold/60" />
-        </motion.div>
-
-        {/* Logo + Emblem watermark */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.85, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-7 rounded-full relative flex items-center justify-center">
-          {/* Rotating Emblem watermark behind the logo */}
-          <motion.div
-            className="absolute opacity-[0.07] pointer-events-none"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}>
-            <Emblem size={220} className="text-gold" />
-          </motion.div>
-          <Image
-            alt="logo"
-            priority
-            width={110}
-            height={110}
-            src="/logo.png"
-            className="relative z-10"
-          />
-        </motion.div>
-
-        {/* ── LIKEMINDS title ──────────────────────── */}
-        <div className="overflow-hidden mb-3 w-full">
-          <div className="flex items-baseline justify-center">
-            {/* LIKE — extrabold, white */}
-            {LIKE.map((char, i) => (
-              <motion.span
-                key={`l${i}`}
-                className="font-sans inline-block select-none"
-                style={{
-                  fontSize: "clamp(3.5rem, 17vw, 12rem)",
-                  letterSpacing: "-0.03em",
-                  lineHeight: 0.88,
-                  fontWeight: 800,
-                  color: "white",
-                  textShadow:
-                    "0 0 80px rgba(255,255,255,0.18), 0 2px 40px rgba(255,255,255,0.08)",
-                }}
-                initial={{ y: "110%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{
-                  duration: 0.85,
-                  delay: 0.3 + i * 0.06,
-                  ease: SPRING,
-                }}>
-                {char}
-              </motion.span>
-            ))}
-
-            {/* MINDS — extrabold, gold with brand-accurate glow */}
-            {MINDS.map((char, i) => (
-              <motion.span
-                key={`m${i}`}
-                className="font-sans inline-block select-none"
-                style={{
-                  fontSize: "clamp(3.5rem, 17vw, 12rem)",
-                  letterSpacing: "-0.03em",
-                  lineHeight: 0.88,
-                  fontWeight: 800,
-                  color: "var(--gold)",
-                  textShadow:
-                    "0 0 80px oklch(0.74 0.17 72 / 35%), 0 2px 40px oklch(0.74 0.17 72 / 15%)",
-                }}
-                initial={{ y: "110%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{
-                  duration: 0.85,
-                  delay: 0.58 + i * 0.06,
-                  ease: SPRING,
-                }}>
-                {char}
-              </motion.span>
-            ))}
-          </div>
-        </div>
-
-        {/* Motto */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.05, ease: "easeOut" }}
-          className="font-bold tracking-[0.18em] sm:tracking-[0.38em] text-gold text-sm sm:text-base uppercase mb-1 text-center">
-          Ofu Obi Umunwanne
-        </motion.p>
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.12, ease: "easeOut" }}
-          className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] sm:tracking-[0.38em] text-white/35 uppercase mb-8 text-center">
-          1980 – 1986 · Age Grade · Nomeh Unateze
-        </motion.p>
-
-        {/* Enhanced gold decorative separator with diamond */}
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 0.9, delay: 1.2, ease: SPRING }}
-          className="flex items-center gap-3 mb-8 origin-center">
-          <div className="h-px w-20 bg-linear-to-r from-transparent to-gold/60" />
-          <span className="text-gold text-[9px]">◆</span>
-          <div className="h-px w-20 bg-linear-to-l from-transparent to-gold/60" />
-        </motion.div>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.38, ease: "easeOut" }}
-          className="text-base sm:text-lg text-white/50 max-w-lg text-center leading-relaxed mb-10">
-          A non-profit brotherhood of Nomeh indigenes — building capacity,
-          empowering youth, and championing welfare through united action.
-        </motion.p>
-
-        {/* CTA buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.52, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row gap-3">
-          <Button
-            asChild
-            size="lg"
-            className="bg-gold hover:bg-gold/90 text-green-deep font-bold text-base px-10 rounded-full shadow-lg hover:shadow-gold/25 hover:shadow-xl transition-all duration-300">
-            <Link href="/members">
-              <UsersIcon className="size-4" />
-              Meet Our Members
-            </Link>
-          </Button>
-          <Button
-            asChild
-            size="lg"
-            variant="outline"
-            className="border-white/25 text-white hover:bg-white/10 hover:border-white/40 font-semibold text-base px-10 rounded-full transition-all duration-300">
-            <Link href="/join">Join LikeMinds</Link>
-          </Button>
-        </motion.div>
-
-        {/* ── Bottom ticker ────────────────────────────── */}
-        <div className="absolute bottom-22 left-0 right-0 z-20 overflow-hidden border-t border-white/8 bg-black/25 backdrop-blur-sm py-3">
-          <motion.div
-            className="flex whitespace-nowrap will-change-transform"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 35, repeat: Infinity, ease: "linear" }}>
-            {TICKER_LOOP.map((item, i) => (
+      {/* ── Ticker ─────────────────────────────── */}
+      <div className='absolute inset-x-0 bottom-0 z-20'>
+        <UliBand className='text-gold/50' height={8} />
+        <div className='border-t border-white/10 bg-black/25 py-4 backdrop-blur-md'>
+          <Marquee duration={45} trackClassName='gap-0'>
+            {TICKER.map((item) => (
               <span
-                key={i}
-                className="flex items-center shrink-0 text-[11px] font-semibold tracking-[0.22em] text-white/70 uppercase">
-                <span className="px-6">{item}</span>
-                <span className="text-gold text-[8px] shrink-0">◆</span>
+                key={item}
+                className='flex shrink-0 items-center text-sm font-semibold tracking-[0.2em] text-white/70 uppercase'>
+                <span className='px-7'>{item}</span>
+                <span className='size-1.5 rotate-45 bg-clay' />
               </span>
             ))}
-          </motion.div>
+          </Marquee>
         </div>
       </div>
-
-      {/* ── Scroll indicator ─────────────────────────── */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 z-10"
-        style={{ opacity: scrollOpacity }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.1, duration: 0.6 }}>
-        <span className="text-[9px] font-extrabold tracking-[0.3em] text-white/20 uppercase">
-          Scroll
-        </span>
-        <div className="w-5 h-8 rounded-full border border-white/15 flex items-start justify-center pt-1.5">
-          <motion.div className="w-1 h-2 bg-gold rounded-full animate-scroll-dot" />
-        </div>
-      </motion.div>
     </section>
   );
 }

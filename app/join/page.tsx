@@ -10,19 +10,19 @@ import { toast } from "sonner";
 import {
   UserIcon, MapPinIcon, BriefcaseIcon, HeartHandshakeIcon,
   CheckCircle2Icon, ArrowRightIcon, ArrowLeftIcon, SendIcon,
-  PhoneIcon, CalendarIcon, ShieldCheckIcon,
+  PhoneIcon, CalendarIcon, ShieldCheckIcon, HomeIcon, WalletIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { fadeInUp, staggerContainer } from "@/lib/animations";
 import { Emblem } from "@/components/ui/Emblem";
+import { PageHero } from "@/components/ui/PageHero";
+import { UliBand } from "@/components/ui/Ornaments";
 
 // ─── Schema ─────────────────────────────────────────────
 const schema = z.object({
@@ -246,26 +246,26 @@ function Step3({ register, errors }: {
   return (
     <div className="space-y-6">
       {/* Eligibility summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 space-y-3">
+      <div className="bg-primary/5 border border-primary/20 rounded-2xl p-5 space-y-3">
         <div className="flex items-center gap-2">
           <ShieldCheckIcon className="size-4 text-primary shrink-0" />
           <p className="text-sm font-semibold text-foreground">Membership Eligibility Criteria</p>
         </div>
         {[
-          { icon: "🏡", text: "You are an indigene of Nomeh Unateze" },
-          { icon: "✅", text: "You are of good and unquestionable character" },
-          { icon: "📅", text: "You were born between 1980 and 1986" },
-        ].map(({ icon, text }) => (
+          { icon: HomeIcon, text: "You are an indigene of Nomeh Unateze" },
+          { icon: CheckCircle2Icon, text: "You are of good and unquestionable character" },
+          { icon: CalendarIcon, text: "You were born between 1980 and 1986" },
+        ].map(({ icon: Icon, text }) => (
           <div key={text} className="flex items-center gap-2.5">
-            <span className="text-base shrink-0">{icon}</span>
+            <Icon className="size-4 shrink-0 text-primary/70" />
             <p className="text-sm text-muted-foreground">{text}</p>
           </div>
         ))}
       </div>
 
       {/* Registration fee callout */}
-      <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 rounded-xl p-4 flex items-start gap-3">
-        <span className="text-xl shrink-0">💳</span>
+      <div className="bg-clay-muted/70 border border-clay/25 rounded-2xl p-5 flex items-start gap-3">
+        <WalletIcon className="size-5 shrink-0 text-clay mt-0.5" />
         <div>
           <p className="text-sm font-semibold text-foreground">Registration Fee: ₦100,000</p>
           <p className="text-xs text-muted-foreground mt-1">
@@ -361,12 +361,14 @@ export default function JoinPage() {
 
   if (isSubmitted) {
     return (
-      <div className="pt-16 min-h-screen bg-muted/30 flex items-center justify-center px-4">
+      <div className="noise relative min-h-screen bg-green-deep flex items-center justify-center px-4 pt-28 pb-16 overflow-hidden">
+        <div className="pattern-nsibidi absolute inset-0 opacity-70 pointer-events-none" />
+        <div className="absolute -bottom-40 -right-40 size-[36rem] rounded-full bg-clay/30 blur-[140px] pointer-events-none" />
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-md w-full text-center bg-card rounded-2xl border border-border p-10 shadow-xl relative overflow-hidden"
+          initial={{ opacity: 0, y: 30, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 max-w-md w-full text-center bg-card rounded-[2rem] border border-border p-10 shadow-2xl overflow-hidden"
         >
           {/* Staggered gold diamond confetti — deterministic positions */}
           {[8, 18, 28, 12, 22, 32, 15, 25].map((topPct, i) => (
@@ -396,8 +398,8 @@ export default function JoinPage() {
             <Emblem size={80} className="text-gold" />
           </motion.div>
 
-          <h2 className="font-sans text-2xl font-bold text-foreground mb-3">
-            Application Received!
+          <h2 className="font-display text-3xl font-medium text-foreground mb-3">
+            Application received.
           </h2>
           <p className="text-muted-foreground text-sm leading-relaxed mb-5">
             Thank you for applying to join the{" "}
@@ -407,11 +409,11 @@ export default function JoinPage() {
           </p>
 
           {/* Shimmer motto */}
-          <p className="text-gradient-gold animate-shimmer font-sans italic font-bold text-lg mb-6">
+          <p className="font-display italic text-clay text-2xl mb-7">
             &ldquo;Ofu Obi Umunwanne&rdquo;
           </p>
 
-          <Button asChild className="bg-primary hover:bg-primary/90 w-full">
+          <Button asChild className="bg-primary hover:bg-clay w-full h-12 rounded-full font-bold transition-colors duration-300">
             <Link href="/">Return to Home</Link>
           </Button>
         </motion.div>
@@ -420,51 +422,32 @@ export default function JoinPage() {
   }
 
   return (
-    <div className="pt-16 min-h-screen bg-muted/30">
-      {/* Hero — elevated with green-deep + uli pattern + Emblem watermark */}
-      <section className="relative py-16 bg-green-deep overflow-hidden noise">
-        <div className="absolute inset-0 pattern-uli pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.36_0.17_152/50%)_0%,transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.17_72/8%)_0%,transparent_60%)]" />
-        {/* Emblem watermark */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04]">
-          <Emblem size={320} className="text-white" />
+    <div className="min-h-screen bg-muted/40">
+      <PageHero
+        eyebrow="Become a Member"
+        title="Take your place"
+        accent="among your brothers."
+        watermark="Nnoo"
+        description="Membership is open exclusively to male indigenes of Nomeh Unateze of good character, born between 1980 and 1986."
+      >
+        <div className="flex flex-col items-center gap-5">
+          <div className="flex flex-wrap justify-center gap-2">
+            {["Nomeh Unateze Indigene", "Good Character", "Born 1980 – 1986"].map((c) => (
+              <span key={c} className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/85 backdrop-blur-sm">
+                <CheckCircle2Icon className="size-3.5 shrink-0 text-gold" />
+                {c}
+              </span>
+            ))}
+          </div>
+          <div className="rounded-2xl border border-gold/40 bg-white/5 px-7 py-3 backdrop-blur-sm">
+            <p className="text-xs text-white/60">One-time Registration Fee</p>
+            <p className="font-display text-gradient-gold animate-shimmer mt-0.5 text-3xl font-semibold">₦100,000</p>
+          </div>
         </div>
-        <div className="absolute bottom-0 inset-x-0 h-px bg-linear-to-r from-transparent via-gold/50 to-transparent" />
-
-        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="flex flex-col items-center gap-4">
-            <motion.div variants={fadeInUp}>
-              <Badge variant="gold" className="text-xs tracking-widest animate-pulse-gold">BECOME A MEMBER</Badge>
-            </motion.div>
-            <motion.h1 variants={fadeInUp} className="font-sans text-3xl sm:text-4xl font-bold text-white">
-              Membership Application
-            </motion.h1>
-            <motion.p variants={fadeInUp} className="text-white/75 max-w-lg text-sm leading-relaxed">
-              Membership is open exclusively to male indigenes of Nomeh Unateze of good character, born between 1980 and 1986.
-            </motion.p>
-
-            {/* Eligibility chips */}
-            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-2">
-              {["Nomeh Unateze Indigene", "Good Character", "Born 1980 – 1986"].map((c) => (
-                <span key={c} className="flex items-center gap-1.5 bg-white/10 border border-white/20 text-white/85 text-xs px-3 py-1.5 rounded-full">
-                  <CheckCircle2Icon className="size-3 shrink-0" />
-                  {c}
-                </span>
-              ))}
-            </motion.div>
-
-            {/* Fee badge */}
-            <motion.div variants={fadeInUp} className="bg-white/10 border border-gold/40 rounded-xl px-6 py-3">
-              <p className="text-white/60 text-xs">One-time Registration Fee</p>
-              <p className="text-gradient-gold animate-shimmer font-sans font-bold text-2xl mt-0.5">₦100,000</p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+      </PageHero>
 
       {/* Form */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         {/* Progress steps — gold active state */}
         <div className="mb-10">
           <div className="flex items-center justify-between relative">
@@ -483,15 +466,15 @@ export default function JoinPage() {
                   <div className={cn(
                     "w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300",
                     isComplete
-                      ? "bg-green-mid border-green-mid text-white shadow-md"
+                      ? "bg-primary border-primary text-primary-foreground shadow-md"
                       : isActive
-                      ? "bg-gold border-gold text-green-deep shadow-[0_0_12px_4px_oklch(0.74_0.17_72/35%)]"
-                      : "bg-background border-border text-muted-foreground"
+                      ? "bg-gold border-gold text-green-deep shadow-[0_0_0_6px_oklch(0.72_0.135_74/20%)]"
+                      : "bg-card border-border text-muted-foreground"
                   )}>
                     {isComplete ? <CheckCircle2Icon className="size-5" /> : <step.icon className="size-4" />}
                   </div>
                   <div className="hidden sm:flex flex-col items-center">
-                    <span className={`text-[11px] font-semibold ${isActive ? "text-gold" : isComplete ? "text-primary/60" : "text-muted-foreground"}`}>
+                    <span className={`text-xs font-bold ${isActive ? "text-clay" : isComplete ? "text-primary" : "text-muted-foreground"}`}>
                       {step.title}
                     </span>
                   </div>
@@ -506,14 +489,16 @@ export default function JoinPage() {
         </div>
 
         {/* Form card */}
-        <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
-          <div className="px-6 pt-6 pb-4 border-b border-border bg-muted/30">
-            <h2 className="font-semibold text-foreground">{steps[currentStep - 1].title}</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">{steps[currentStep - 1].description}</p>
+        <div className="bg-card rounded-[2rem] border border-border shadow-[0_40px_80px_-50px_oklch(0.22_0.05_155/45%)] overflow-hidden">
+          <UliBand className="text-clay/50" height={8} />
+          <div className="px-6 sm:px-8 pt-7 pb-5 border-b border-border">
+            <p className="eyebrow text-clay">Step {currentStep} of {steps.length}</p>
+            <h2 className="font-display text-2xl font-medium text-foreground mt-2">{steps[currentStep - 1].title}</h2>
+            <p className="text-sm text-muted-foreground mt-1">{steps[currentStep - 1].description}</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="p-6">
+            <div className="p-6 sm:p-8">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentStep}
@@ -530,25 +515,25 @@ export default function JoinPage() {
             </div>
 
             {/* Navigation */}
-            <div className="px-6 pb-6 flex items-center justify-between gap-3 border-t border-border pt-5">
+            <div className="px-6 sm:px-8 pb-7 flex items-center justify-between gap-3 border-t border-border pt-6">
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleBack}
                 disabled={currentStep === 1}
-                className="gap-2"
+                className="gap-2 h-12 rounded-full px-6"
               >
                 <ArrowLeftIcon className="size-4" />
                 Back
               </Button>
               <span className="text-xs text-muted-foreground">{currentStep} / {steps.length}</span>
               {currentStep < 3 ? (
-                <Button type="button" onClick={handleNext} className="gap-2 bg-primary hover:bg-primary/90">
+                <Button type="button" onClick={handleNext} className="gap-2 h-12 rounded-full px-7 font-bold bg-primary hover:bg-clay transition-colors duration-300">
                   Next
                   <ArrowRightIcon className="size-4" />
                 </Button>
               ) : (
-                <Button type="submit" disabled={isLoading} className="gap-2 bg-primary hover:bg-primary/90">
+                <Button type="submit" disabled={isLoading} className="gap-2 h-12 rounded-full px-7 font-bold bg-primary hover:bg-clay transition-colors duration-300">
                   {isLoading ? (
                     <span className="flex items-center gap-2">
                       <svg className="animate-spin size-4" viewBox="0 0 24 24" fill="none">

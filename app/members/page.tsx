@@ -1,27 +1,10 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Emblem } from "@/components/ui/Emblem";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { scaleIn, staggerContainer } from "@/lib/animations";
-import { members, type Member } from "@/lib/data/members";
-import { cn } from "@/lib/utils";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValue,
-  useSpring,
-} from "framer-motion";
-import {
-  BookOpenIcon,
+  ArrowUpRightIcon,
   BriefcaseIcon,
   GlobeIcon,
   MailIcon,
@@ -31,41 +14,21 @@ import {
   UserIcon,
   XIcon,
 } from "lucide-react";
-import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { PageHero } from "@/components/ui/PageHero";
+import { UliBand } from "@/components/ui/Ornaments";
+import { isExecutive, members, sortedMembers, type Member } from "@/lib/data/members";
+import { cn } from "@/lib/utils";
 
-// ─── Position ordering ───────────────────────────────────────────────────────
-const POSITION_ORDER = [
-  "chairman",
-  "vice-chairman",
-  "secretary",
-  "assistant-secretary",
-  "treasurer",
-  "financial-secretary",
-  "public-relations",
-  "provost",
-  "welfare-officer",
-  "legal-adviser",
-];
+const EASE = [0.16, 1, 0.3, 1] as const;
 
-function normalizePosition(position: string): string {
-  return position.toLowerCase().trim().replace(/\s+/g, "-");
-}
-
-function positionRank(position: string): number {
-  const normalized = normalizePosition(position);
-  if (normalized === "member") return POSITION_ORDER.length + 1;
-  const idx = POSITION_ORDER.indexOf(normalized);
-  return idx === -1 ? POSITION_ORDER.length : idx;
-}
-
-const sortedMembers = [...members].sort((a, b) => {
-  const ra = positionRank(a.position);
-  const rb = positionRank(b.position);
-  if (ra !== rb) return ra - rb;
-  // Both are regular members — sort alphabetically by first name
-  return a.name.localeCompare(b.name);
-});
+const FILTERS = [
+  { id: "all", label: "Everyone" },
+  { id: "executive", label: "Executive Council" },
+  { id: "member", label: "Members" },
+] as const;
+type FilterId = (typeof FILTERS)[number]["id"];
 
 // ─── Bio Sheet ───────────────────────────────────────────────────────────────
 function BioSheet({
@@ -77,125 +40,70 @@ function BioSheet({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const phone = member?.social?.phone ?? member?.phone;
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side='right'
-        className={cn(
-          // full-width on mobile, fixed moderate width from sm up
-          "w-full sm:w-[420px] sm:max-w-[420px]",
-          "p-0 overflow-y-auto flex flex-col gap-0",
-        )}>
+        data-lenis-prevent
+        className='flex w-full flex-col gap-0 overflow-y-auto p-0 sm:w-[440px] sm:max-w-[440px]'>
         {member && (
           <>
-            {/* Photo banner */}
-            <div className='relative h-75 shrink-0'>
+            <div className='relative h-96 shrink-0'>
               <Image
                 src={member.photo}
                 alt={member.name}
                 fill
                 className='object-cover object-top'
-                sizes='420px'
+                sizes='440px'
               />
-              <div className='absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent' />
-              {/* Emblem watermark in corner */}
-              <div className='absolute top-3 left-3 pointer-events-none opacity-[1]'>
-                <Emblem size={60} />
-              </div>
-              <div className='absolute bottom-0 left-0 right-0 p-5'>
-                <Badge
-                  variant='outline'
-                  className='text-[10px] border-white/30 text-white bg-white/10 mb-2'>
+              <div className='absolute inset-0 bg-linear-to-t from-green-deep via-green-deep/20 to-transparent' />
+              <div className='absolute inset-x-0 bottom-0 p-6'>
+                <span className='eyebrow inline-block rounded-full bg-gold px-3 py-1 text-[0.62rem] text-green-deep'>
                   {member.position}
-                </Badge>
-                <SheetHeader className='p-0 gap-0'>
-                  <SheetTitle className='font-sans text-xl font-bold text-white leading-tight text-left'>
+                </span>
+                <SheetHeader className='gap-0 p-0'>
+                  <SheetTitle className='font-display mt-3 text-left text-3xl leading-tight font-medium text-white'>
                     {member.name}
                   </SheetTitle>
                 </SheetHeader>
               </div>
             </div>
+            <UliBand className='text-gold/60' height={8} />
 
-            {/* Details */}
-            <div className='p-6 flex flex-col gap-5 flex-1'>
-              {/* Meta */}
+            <div className='flex flex-1 flex-col gap-7 p-6'>
               <div className='grid grid-cols-2 gap-4'>
-                <div className='space-y-1'>
-                  <div className='flex items-center gap-1.5 text-xs text-muted-foreground'>
-                    <BriefcaseIcon className='size-3' />
-                    Occupation
-                  </div>
-                  <p className='text-sm font-medium text-foreground leading-snug'>
-                    {member.occupation}
-                  </p>
-                </div>
-                <div className='space-y-1'>
-                  <div className='flex items-center gap-1.5 text-xs text-muted-foreground'>
-                    <MapPinIcon className='size-3' />
-                    Location
-                  </div>
-                  <p className='text-sm font-medium text-foreground leading-snug'>
-                    {member.location}
-                  </p>
-                </div>
+                <Meta icon={BriefcaseIcon} label='Occupation' value={member.occupation} />
+                <Meta icon={MapPinIcon} label='Location' value={member.location} />
               </div>
 
-              <Separator />
+              {member.bio && (
+                <div>
+                  <p className='eyebrow mb-3 text-clay'>Biography</p>
+                  <p className='leading-relaxed text-foreground/80'>{member.bio}</p>
+                </div>
+              )}
 
-              {/* Bio */}
-              <div>
-                <p className='text-[11px] font-bold text-muted-foreground uppercase tracking-widest mb-3'>
-                  Biography
-                </p>
-                <p className='text-sm text-foreground/80 leading-relaxed'>
-                  {member.bio}
-                </p>
-              </div>
-
-              <Separator />
-
-              <div className='space-y-1.5'>
-                {/* Email */}
-                {member.social?.email && (
-                  <>
-                    {/* <Separator /> */}
-                    <a
-                      href={`mailto:${member.social.email}`}
-                      className='flex items-center gap-2 text-sm text-primary hover:underline'>
-                      <MailIcon className='size-4' />
+              {(member.social?.email || member.website || phone) && (
+                <div className='space-y-2'>
+                  <p className='eyebrow mb-3 text-clay'>Get in touch</p>
+                  {member.social?.email && (
+                    <ContactRow href={`mailto:${member.social.email}`} icon={MailIcon}>
                       {member.social.email}
-                    </a>
-                  </>
-                )}
-
-                {/* Website */}
-                {member.website && (
-                  <>
-                    {/* <Separator /> */}
-                    <a
-                      href={member.website}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='flex items-center gap-2 text-sm text-primary hover:underline'>
-                      <GlobeIcon className='size-4' />
+                    </ContactRow>
+                  )}
+                  {member.website && (
+                    <ContactRow href={member.website} icon={GlobeIcon} external>
                       {member.website.replace(/^https?:\/\//, "")}
-                    </a>
-                  </>
-                )}
-
-                {/* Phone */}
-                {(member.social?.phone || member.phone) && (
-                  <>
-                    <Separator />
-                    <a
-                      href={`tel:${member.social?.phone ?? member.phone}`}
-                      className='flex items-center gap-2 text-sm text-primary hover:underline'>
-                      <PhoneIcon className='size-4' />
-                      {member.social?.phone ?? member.phone}
-                    </a>
-                  </>
-                )}
-              </div>
+                    </ContactRow>
+                  )}
+                  {phone && (
+                    <ContactRow href={`tel:${phone}`} icon={PhoneIcon}>
+                      {phone}
+                    </ContactRow>
+                  )}
+                </div>
+              )}
             </div>
           </>
         )}
@@ -204,66 +112,69 @@ function BioSheet({
   );
 }
 
-// ─── TiltCard wrapper — 3D hover tilt ────────────────────────────────────────
-function TiltCard({ children }: { children: React.ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
-  const rotateX = useSpring(useMotionValue(0), { stiffness: 120, damping: 20 });
-  const rotateY = useSpring(useMotionValue(0), { stiffness: 120, damping: 20 });
-
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (rafRef.current !== null) return;
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-      rafRef.current = requestAnimationFrame(() => {
-        rafRef.current = null;
-        const rect = ref.current?.getBoundingClientRect();
-        if (!rect) return;
-        const xPct = (clientX - rect.left) / rect.width - 0.5;
-        const yPct = (clientY - rect.top) / rect.height - 0.5;
-        rotateY.set(xPct * 5);
-        rotateX.set(-yPct * 5);
-      });
-    },
-    [rotateX, rotateY],
-  );
-
-  const handleMouseLeave = useCallback(() => {
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-    rotateX.set(0);
-    rotateY.set(0);
-  }, [rotateX, rotateY]);
-
+function Meta({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+}) {
   return (
-    <motion.div
-      ref={ref}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}>
-      {children}
-    </motion.div>
+    <div className='rounded-2xl border border-border bg-muted/40 p-4'>
+      <div className='flex items-center gap-1.5 text-xs text-muted-foreground'>
+        <Icon className='size-3.5' />
+        {label}
+      </div>
+      <p className='mt-1.5 text-sm leading-snug font-semibold text-foreground'>{value}</p>
+    </div>
+  );
+}
+
+function ContactRow({
+  href,
+  icon: Icon,
+  external,
+  children,
+}: {
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  external?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      className='group flex items-center gap-3 rounded-2xl border border-border p-3 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-primary/5'>
+      <span className='grid size-9 place-items-center rounded-xl bg-primary/10 text-primary'>
+        <Icon className='size-4' />
+      </span>
+      <span className='min-w-0 flex-1 truncate'>{children}</span>
+      <ArrowUpRightIcon className='size-4 text-muted-foreground transition-transform group-hover:rotate-45' />
+    </a>
   );
 }
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function MembersPage() {
   const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<FilterId>("all");
   const [selected, setSelected] = useState<Member | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const q = query.trim().toLowerCase();
-  const filtered = q
-    ? sortedMembers.filter(
-        (m) =>
-          m.name.toLowerCase().includes(q) ||
-          m.position.toLowerCase().includes(q) ||
-          m.location.toLowerCase().includes(q),
-      )
-    : sortedMembers;
+  const filtered = sortedMembers.filter((m) => {
+    if (filter === "executive" && !isExecutive(m)) return false;
+    if (filter === "member" && isExecutive(m)) return false;
+    if (!q) return true;
+    return (
+      m.name.toLowerCase().includes(q) ||
+      m.position.toLowerCase().includes(q) ||
+      m.location.toLowerCase().includes(q)
+    );
+  });
 
   function openBio(member: Member) {
     setSelected(member);
@@ -271,184 +182,143 @@ export default function MembersPage() {
   }
 
   return (
-    <div className='pt-16'>
-      {/* Hero */}
-      <section className='relative py-24 bg-primary overflow-hidden'>
-        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,oklch(0.52_0.1_155)_0%,transparent_60%)]' />
-        <div className='relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center'>
-          <motion.div
-            variants={staggerContainer}
-            initial='hidden'
-            animate='visible'
-            className='flex flex-col items-center gap-4'>
-            <motion.div
-              variants={scaleIn}
-              className='relative flex items-center justify-center'>
-              {/* Ghost watermark behind */}
-              <motion.div
-                className='absolute opacity-[0.06] pointer-events-none'
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 120,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}>
-                <Emblem size={200} className='text-white' />
-              </motion.div>
-              <Emblem size={100} className='text-gold relative z-10' />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}>
-              <Badge variant='gold' className='text-xs tracking-widest'>
-                OUR BROTHERHOOD
-              </Badge>
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25 }}
-              className='font-sans text-4xl sm:text-5xl font-bold text-white'>
-              The LikeMinds Family
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 }}
-              className='text-white/75 text-lg max-w-2xl'>
-              {members.length} distinguished men united by birth, community, and
-              the unbreakable spirit of{" "}
-              <em className='text-gold font-semibold'>Ofu Obi Umunwanne</em>.
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
+    <>
+      <PageHero
+        eyebrow='Our Brotherhood'
+        title='The LikeMinds'
+        accent='family.'
+        watermark='Brotherhood'
+        description={
+          <>
+            {members.length} distinguished men united by birth, community, and the
+            unbreakable spirit of <em className='font-display text-gold'>Ofu Obi Umunwanne</em>.
+          </>
+        }
+      />
 
-      {/* Search bar */}
-      <section className='sticky top-16 z-30 bg-background/95 backdrop-blur-md border-b border-border shadow-sm'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex gap-3 items-center'>
-          <div className='relative flex-1 max-w-md'>
-            <SearchIcon className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground' />
-            <Input
+      {/* Toolbar */}
+      <section className='sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-xl'>
+        <div className='mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8'>
+          <div className='relative flex-1 sm:max-w-sm'>
+            <SearchIcon className='absolute top-1/2 left-4 size-4 -translate-y-1/2 text-muted-foreground' />
+            <input
               placeholder='Search by name, position or location…'
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className='pl-9 pr-9 w-full'
+              aria-label='Search members'
+              className='h-11 w-full rounded-full border border-border bg-card pr-10 pl-11 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/50 focus:ring-4 focus:ring-primary/10'
             />
             {query && (
               <button
-                className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground'
-                onClick={() => setQuery("")}>
+                className='absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:text-foreground'
+                onClick={() => setQuery("")}
+                aria-label='Clear search'>
                 <XIcon className='size-3.5' />
               </button>
             )}
           </div>
-          <span className='text-sm text-muted-foreground shrink-0 hidden sm:block'>
-            {filtered.length} member{filtered.length !== 1 ? "s" : ""}
+
+          <div className='flex items-center gap-1 overflow-x-auto rounded-full border border-border bg-card p-1'>
+            {FILTERS.map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setFilter(f.id)}
+                className={cn(
+                  "relative isolate shrink-0 rounded-full px-4 py-2 text-xs font-bold transition-colors sm:text-sm",
+                  filter === f.id ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+                )}>
+                {filter === f.id && (
+                  <motion.span
+                    layoutId='member-filter'
+                    className='absolute inset-0 -z-10 rounded-full bg-primary'
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                )}
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          <span className='hidden shrink-0 text-sm text-muted-foreground sm:ml-auto sm:block'>
+            <span className='font-display text-lg text-foreground'>{filtered.length}</span>{" "}
+            {filtered.length === 1 ? "member" : "members"}
           </span>
         </div>
       </section>
 
-      {/* Members grid */}
-      <section className='py-14 bg-muted/30'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <AnimatePresence mode='wait'>
-            {filtered.length === 0 ? (
-              <motion.div
-                key='empty'
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className='text-center py-24'>
-                <div className='w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto'>
-                  <UserIcon className='size-8 text-muted-foreground' />
-                </div>
-                <p className='text-muted-foreground mt-4'>
-                  No members found matching your search.
-                </p>
-                <Button
-                  variant='outline'
-                  className='mt-4'
-                  onClick={() => setQuery("")}>
-                  Clear search
-                </Button>
-              </motion.div>
-            ) : (
-              <motion.div
-                key={q}
-                variants={staggerContainer}
-                initial='hidden'
-                animate='visible'
-                className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
-                {filtered.map((member) => (
-                  <motion.div key={member.id} variants={scaleIn}>
-                    <TiltCard>
-                      <div className='group bg-card rounded-2xl border border-border overflow-hidden hover:border-primary/30 hover:shadow-xl transition-all duration-300 flex flex-col'>
-                        {/* Photo */}
-                        <div className='relative h-75 overflow-hidden shrink-0'>
-                          <Image
-                            src={member.photo}
-                            alt={member.name}
-                            fill
-                            className='object-cover object-top transition-transform duration-500 group-hover:scale-105'
-                            sizes='(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw'
-                          />
-                          <div className='absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent' />
-                        </div>
-
-                        {/* Info */}
-                        <div className='p-3.5 flex flex-col flex-1'>
-                          <div className='flex-1'>
-                            <p className='font-sans font-bold text-foreground leading-tight mb-0.5'>
-                              {member.name}
-                            </p>
-
-                            <p className=' text-primary font-medium truncate'>
-                              {member.position}
-                            </p>
-                            <div className='flex items-center gap-1 text-sm text-muted-foreground mt-0.5'>
-                              <MapPinIcon className='size-3 shrink-0' />
-                              <span className='truncate'>
-                                {member.location}
-                              </span>
-                            </div>
-                            {member.website && (
-                              <a
-                                href={member.website}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                                onClick={(e) => e.stopPropagation()}
-                                className='flex items-center gap-1 text-sm text-primary hover:underline mt-0.5'>
-                                <GlobeIcon className='size-3 shrink-0' />
-                                <span className='truncate'>
-                                  {member.website.replace(/^https?:\/\//, "")}
-                                </span>
-                              </a>
-                            )}
-                          </div>
-
-                          {/* View Bio button */}
-                          <Button
-                            size='sm'
-                            variant='outline'
-                            className='w-full h-7 text-[11px] font-semibold rounded-lg border-primary/20 text-primary hover:bg-primary hover:text-primary-foreground transition-colors duration-200 mt-3'
-                            onClick={() => openBio(member)}>
-                            <BookOpenIcon className='size-3 mr-1' />
-                            View Bio
-                          </Button>
-                        </div>
-                      </div>
-                    </TiltCard>
-                  </motion.div>
+      {/* Grid */}
+      <section className='min-h-[60vh] bg-muted/40 py-14 sm:py-20'>
+        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+          {filtered.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className='py-24 text-center'>
+              <div className='mx-auto grid size-16 place-items-center rounded-full bg-muted'>
+                <UserIcon className='size-8 text-muted-foreground' />
+              </div>
+              <p className='mt-4 text-muted-foreground'>No members found matching your search.</p>
+              <Button
+                variant='outline'
+                className='mt-4 rounded-full'
+                onClick={() => {
+                  setQuery("");
+                  setFilter("all");
+                }}>
+                Clear filters
+              </Button>
+            </motion.div>
+          ) : (
+            <motion.div layout className='grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4'>
+              <AnimatePresence mode='popLayout'>
+                {filtered.map((member, i) => (
+                  <motion.button
+                    layout
+                    key={member.id}
+                    initial={{ opacity: 0, y: 30, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.94 }}
+                    transition={{ duration: 0.6, delay: Math.min(i, 12) * 0.035, ease: EASE }}
+                    onClick={() => openBio(member)}
+                    className='group text-left'>
+                    <div className='relative rounded-lg aspect-[3/4] overflow-hidden border border-border bg-card shadow-[0_20px_40px_-30px_oklch(0.22_0.05_155/50%)] transition-shadow duration-500 group-hover:shadow-[0_30px_60px_-25px_oklch(0.22_0.05_155/55%)]'>
+                      <Image
+                        src={member.photo}
+                        alt={member.name}
+                        fill
+                        sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
+                        className='object-cover object-top transition-transform duration-[1.2s] ease-out group-hover:scale-[1.06]'
+                      />
+                      <div className='absolute inset-0 bg-linear-to-t from-green-deep/85 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100' />
+                      {isExecutive(member) && (
+                        <span className='eyebrow absolute bottom-4 left-4 rounded-full bg-gold/95 px-3 py-1 text-[0.55rem] whitespace-nowrap text-green-deep shadow-lg'>
+                          Executive
+                        </span>
+                      )}
+                      <span className='absolute right-4 bottom-4 grid size-10 translate-y-3 place-items-center rounded-full bg-gold text-green-deep opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100'>
+                        <ArrowUpRightIcon className='size-4' />
+                      </span>
+                    </div>
+                    <div className='px-1 pt-4'>
+                      <p className='font-display text-lg leading-tight font-medium text-foreground transition-colors group-hover:text-primary'>
+                        {member.name}
+                      </p>
+                      <p className='mt-1 text-xs font-bold tracking-wider text-clay uppercase'>
+                        {member.position}
+                      </p>
+                      <p className='mt-1.5 flex items-center gap-1 text-sm text-muted-foreground'>
+                        <MapPinIcon className='size-3.5 shrink-0' />
+                        <span className='truncate'>{member.location}</span>
+                      </p>
+                    </div>
+                  </motion.button>
                 ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </AnimatePresence>
+            </motion.div>
+          )}
         </div>
       </section>
 
-      {/* Bio Sheet */}
       <BioSheet
         member={selected}
         open={sheetOpen}
@@ -457,6 +327,6 @@ export default function MembersPage() {
           if (!open) setSelected(null);
         }}
       />
-    </div>
+    </>
   );
 }

@@ -1,152 +1,93 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { UsersIcon, FolderOpenIcon, HeartHandshakeIcon, CalendarIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { animate, motion, useInView, useMotionValue, useTransform } from "framer-motion";
+import { members } from "@/lib/data/members";
+import { Reveal } from "@/components/motion/Reveal";
+import { UliMark } from "@/components/ui/Ornaments";
 
 const stats = [
   {
-    icon: UsersIcon,
-    value: 28,
-    suffix: "+",
-    label: "Active Members",
-    description: "Professionals & community leaders across Nigeria",
+    value: members.length,
+    suffix: "",
+    label: "Members",
+    description: "Professionals & community leaders across Nigeria and beyond",
   },
   {
-    icon: FolderOpenIcon,
     value: 3,
     suffix: "+",
     label: "Community Projects",
-    description: "Infrastructure, health, education & welfare",
+    description: "Sport, education, welfare and empowerment",
   },
   {
-    icon: HeartHandshakeIcon,
     value: 1500,
     suffix: "+",
     label: "Lives Impacted",
     description: "Beneficiaries of our community-driven work",
   },
   {
-    icon: CalendarIcon,
     value: 2,
-    suffix: "+ yrs",
+    suffix: "+",
     label: "Years Active",
-    description: "Rooted in brotherhood",
+    description: "Rooted in brotherhood since May 2024",
   },
 ];
 
-// Digit-flip counter: animates each digit individually
-function FlipCounter({ value, suffix }: { value: number; suffix: string }) {
-  const [displayValue, setDisplayValue] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
+function CountUp({ value, suffix }: { value: number; suffix: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const count = useMotionValue(0);
+  const display = useTransform(count, (v) => Math.round(v).toLocaleString());
 
   useEffect(() => {
     if (!inView) return;
-    const duration = 1800;
-    const steps = 60;
-    const increment = value / steps;
-    let current = 0;
-    const timer = setInterval(() => {
-      current = Math.min(current + increment, value);
-      setDisplayValue(Math.floor(current));
-      if (current >= value) clearInterval(timer);
-    }, duration / steps);
-    return () => clearInterval(timer);
-  }, [inView, value]);
-
-  const digits = displayValue.toLocaleString().split("");
+    const controls = animate(count, value, { duration: 2.2, ease: [0.16, 1, 0.3, 1] });
+    return () => controls.stop();
+  }, [inView, value, count]);
 
   return (
-    <div ref={ref} className="flex items-end justify-center gap-0.5 overflow-hidden">
-      {digits.map((char, i) => (
-        <AnimatePresence key={i} mode="popLayout">
-          <motion.span
-            key={char + i}
-            className="inline-block tabular-nums will-change-transform"
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {char}
-          </motion.span>
-        </AnimatePresence>
-      ))}
-      <span className="inline-block">{suffix}</span>
-    </div>
+    <span ref={ref} className='tabular-nums'>
+      <motion.span>{display}</motion.span>
+      <span className='text-clay'>{suffix}</span>
+    </span>
   );
 }
 
 export function StatsSection() {
   return (
-    <section className="relative py-20 bg-green-deep overflow-hidden noise">
-      {/* Igbo uli diamond pattern */}
-      <div className="absolute inset-0 pattern-diamond pointer-events-none" />
+    <section className='relative bg-background py-24 sm:py-28'>
+      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <div className='flex flex-col gap-14'>
+          <Reveal className='max-w-2xl'>
+            <p className='eyebrow flex items-center gap-2.5 text-clay'>
+              <UliMark />
+              Our impact in numbers
+            </p>
+            <p className='font-display mt-4 text-3xl leading-tight font-medium text-foreground sm:text-4xl'>
+              Measured in lives touched,{" "}
+              <em className='font-display-wonk text-primary'>not in words.</em>
+            </p>
+          </Reveal>
 
-      {/* Subtle radial glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute left-1/4 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-green-mid/20 blur-[120px]" />
-        <div className="absolute right-1/4 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gold/6 blur-[100px]" />
-      </div>
-
-      {/* Top & bottom gold rule */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-      <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section label */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-14"
-        >
-          <span className="text-[11px] font-bold tracking-[0.35em] text-gold/70 uppercase">
-            Our Impact in Numbers
-          </span>
-          <div className="mt-2 h-px w-16 mx-auto bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-        </motion.div>
-
-        {/* Stats grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/8 rounded-2xl overflow-hidden border border-white/8">
-          {stats.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative flex flex-col items-center text-center px-6 py-10 bg-green-deep hover:bg-white/4 transition-colors duration-300"
-            >
-              {/* Icon — lantern double-ring treatment */}
-              <div className="mb-5 p-3 rounded-xl border border-gold/20 group-hover:border-gold/50 group-hover:bg-gold/8 transition-all duration-300">
-                <div className="p-2 rounded-lg bg-white/6 group-hover:bg-gold/10 transition-all duration-300">
-                  <stat.icon className="size-5 text-gold/80 group-hover:text-gold transition-colors duration-300" />
-                </div>
-              </div>
-
-              {/* Digit-flip Number */}
-              <div className="font-sans text-4xl sm:text-5xl font-black text-white leading-none mb-2 group-hover:text-gold transition-colors duration-300">
-                <FlipCounter value={stat.value} suffix={stat.suffix} />
-              </div>
-
-              {/* Label */}
-              <p className="text-sm font-bold text-white/80 uppercase tracking-widest mb-2">
-                {stat.label}
-              </p>
-
-              {/* Description */}
-              <p className="text-xs text-white/40 leading-relaxed max-w-[14ch]">
-                {stat.description}
-              </p>
-
-              {/* Bottom accent line — now actually visible on hover */}
-              <div className="absolute bottom-0 inset-x-8 h-px bg-gradient-to-r from-transparent via-gold/0 to-transparent group-hover:via-gold/60 transition-all duration-700" />
-            </motion.div>
-          ))}
+          <div className='grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4 lg:gap-0'>
+            {stats.map((stat, i) => (
+              <Reveal
+                key={stat.label}
+                delay={i * 0.1}
+                className='group relative lg:border-l lg:border-border lg:px-8 lg:first:border-l-0 lg:first:pl-0'>
+                <p className='font-display text-[2.6rem] leading-none font-medium whitespace-nowrap text-foreground sm:text-6xl lg:text-7xl'>
+                  <CountUp value={stat.value} suffix={stat.suffix} />
+                </p>
+                <div className='mt-5 h-px w-10 bg-gold transition-all duration-500 group-hover:w-20' />
+                <p className='mt-4 text-sm font-bold tracking-wide text-foreground'>
+                  {stat.label}
+                </p>
+                <p className='mt-1.5 text-sm leading-relaxed text-muted-foreground'>
+                  {stat.description}
+                </p>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>

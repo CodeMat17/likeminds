@@ -1,8 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { MailIcon, PhoneIcon, MapPinIcon, SendIcon, CheckCircle2Icon } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowUpRightIcon,
+  CheckIcon,
+  MailIcon,
+  MapPinIcon,
+  PhoneIcon,
+  SendIcon,
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { PageHero } from "@/components/ui/PageHero";
+import { Reveal } from "@/components/motion/Reveal";
+import { UliBand } from "@/components/ui/Ornaments";
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -11,11 +24,6 @@ function WhatsAppIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { staggerContainer, fadeInUp } from "@/lib/animations";
 
 const contactDetails = [
   {
@@ -44,10 +52,13 @@ const contactDetails = [
   },
 ];
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+const EMPTY_FORM = { name: "", email: "", subject: "", message: "" };
+
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [form, setForm] = useState(EMPTY_FORM);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -75,210 +86,178 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="pt-16">
-      {/* Hero */}
-      <section className="relative py-24 bg-primary overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,oklch(0.52_0.1_155)_0%,transparent_60%)]" />
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col items-center gap-4"
-          >
-            <motion.h1
-              variants={fadeInUp}
-              className="font-sans text-4xl sm:text-5xl font-bold text-white"
-            >
-              Contact Us
-            </motion.h1>
-            <motion.p variants={fadeInUp} className="text-white/75 text-lg max-w-2xl">
-              Have a question, suggestion, or want to collaborate? We&apos;d love to hear from you.
-              Reach out and a member of our team will respond promptly.
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
+    <>
+      <PageHero
+        eyebrow='Contact Us'
+        title="Let's"
+        accent='talk.'
+        watermark='Kedu?'
+        description="Have a question, suggestion, or want to collaborate? We'd love to hear from you. Reach out and a member of our team will respond promptly."
+      />
 
-      {/* Content */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact info */}
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="space-y-8"
-            >
-              <motion.div variants={fadeInUp}>
-                <h2 className="font-sans text-2xl font-bold text-foreground mb-2">
-                  Get in Touch
-                </h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  LikeMinds 1980–1986 is an age-grade association rooted in brotherhood and community
-                  service. We welcome dialogue with indigenes, well-wishers, partners, and the public.
-                </p>
-              </motion.div>
+      <section className='bg-background py-20 sm:py-28'>
+        <div className='mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:px-8'>
+          {/* Info */}
+          <div className='space-y-8 lg:col-span-5'>
+            <Reveal>
+              <p className='eyebrow text-clay'>Get in touch</p>
+              <h2 className='font-display mt-3 text-4xl leading-tight font-medium text-foreground'>
+                Every conversation <em className='font-display-wonk text-primary'>begins with hello.</em>
+              </h2>
+              <p className='mt-4 leading-relaxed text-muted-foreground'>
+                LikeMinds 1980–1986 is an age-grade association rooted in brotherhood and
+                community service. We welcome dialogue with indigenes, well-wishers, partners,
+                and the public.
+              </p>
+            </Reveal>
 
-              <motion.div variants={fadeInUp} className="space-y-5">
-                {contactDetails.map(({ icon: Icon, label, value, href }) => (
-                  <div key={label} className="flex items-start gap-4">
-                    <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <Icon className="size-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-0.5">
-                        {label}
-                      </p>
-                      {href ? (
-                        <a
-                          href={href}
-                          className="text-sm text-foreground hover:text-primary transition-colors font-medium"
-                        >
-                          {value}
-                        </a>
-                      ) : (
-                        <p className="text-sm text-foreground font-medium">{value}</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
+            <div className='space-y-3'>
+              {contactDetails.map(({ icon: Icon, label, value, href }, i) => {
+                const body = (
+                  <>
+                    <span className='grid size-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary transition-colors duration-500 group-hover:bg-primary group-hover:text-primary-foreground'>
+                      <Icon className='size-5' />
+                    </span>
+                    <span className='min-w-0 flex-1'>
+                      <span className='eyebrow block text-[0.62rem] text-muted-foreground'>{label}</span>
+                      <span className='mt-1 block font-semibold text-foreground'>{value}</span>
+                    </span>
+                    {href && (
+                      <ArrowUpRightIcon className='size-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:rotate-45 group-hover:text-primary' />
+                    )}
+                  </>
+                );
+                const cls =
+                  "group flex items-center gap-4 rounded-3xl border border-border bg-card p-4 transition-colors duration-300 hover:border-primary/40";
+                return (
+                  <Reveal key={label} delay={i * 0.06}>
+                    {href ? (
+                      <a
+                        href={href}
+                        {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className={cls}>
+                        {body}
+                      </a>
+                    ) : (
+                      <div className={cls}>{body}</div>
+                    )}
+                  </Reveal>
+                );
+              })}
+            </div>
 
-              {/* Motto callout */}
-              <motion.div
-                variants={fadeInUp}
-                className="rounded-2xl bg-primary/8 border border-primary/20 p-6"
-              >
-                <p className="text-xs uppercase tracking-widest text-primary font-semibold mb-2">
-                  Our Motto
-                </p>
-                <p className="font-sans text-xl italic text-foreground font-semibold">
+            <Reveal className='noise relative overflow-hidden rounded-3xl bg-green-deep p-7'>
+              <div className='pattern-nsibidi absolute inset-0 opacity-60' />
+              <div className='relative'>
+                <p className='eyebrow text-gold'>Our motto</p>
+                <p className='font-display mt-3 text-3xl text-white italic'>
                   &ldquo;Ofu Obi Umunwanne&rdquo;
                 </p>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className='mt-2 text-sm text-white/60'>
                   One heart, one family — the spirit behind everything we do.
                 </p>
-              </motion.div>
-            </motion.div>
-
-            {/* Contact form */}
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <div className="bg-card rounded-2xl border border-border p-8 shadow-sm">
-                {submitted ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex flex-col items-center justify-center gap-4 py-12 text-center"
-                  >
-                    <CheckCircle2Icon className="size-14 text-primary" />
-                    <h3 className="font-sans text-xl font-bold text-foreground">
-                      Message Received!
-                    </h3>
-                    <p className="text-muted-foreground text-sm max-w-xs">
-                      Thank you for reaching out. We&apos;ll get back to you within 2–3 business days.
-                    </p>
-                    <Button
-                      variant="outline"
-                      className="mt-2"
-                      onClick={() => { setSubmitted(false); setForm({ name: "", email: "", subject: "", message: "" }); }}
-                    >
-                      Send another message
-                    </Button>
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                      <h3 className="font-sans text-xl font-bold text-foreground mb-1">
-                        Send a Message
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Fill in the form below and we&apos;ll be in touch.
-                      </p>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <Label htmlFor="name">Full Name *</Label>
-                        <Input
-                          id="name"
-                          name="name"
-                          placeholder="Your full name"
-                          value={form.name}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label htmlFor="email">Email Address *</Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          placeholder="you@example.com"
-                          value={form.email}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <Label htmlFor="subject">Subject *</Label>
-                      <Input
-                        id="subject"
-                        name="subject"
-                        placeholder="What is this about?"
-                        value={form.subject}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <Label htmlFor="message">Message *</Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        placeholder="Write your message here..."
-                        rows={5}
-                        value={form.message}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
-                    >
-                      {loading ? (
-                        <span className="flex items-center gap-2">
-                          <span className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          Sending…
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-2">
-                          <SendIcon className="size-4" />
-                          Send Message
-                        </span>
-                      )}
-                    </Button>
-                  </form>
-                )}
               </div>
-            </motion.div>
+            </Reveal>
           </div>
+
+          {/* Form */}
+          <Reveal delay={0.1} className='lg:col-span-7'>
+            <div className='overflow-hidden rounded-[2rem] border border-border bg-card shadow-[0_40px_80px_-50px_oklch(0.22_0.05_155/45%)]'>
+              <UliBand className='text-clay/50' height={8} />
+              <div className='p-7 sm:p-10'>
+                <AnimatePresence mode='wait'>
+                  {submitted ? (
+                    <motion.div
+                      key='done'
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.6, ease: EASE }}
+                      className='flex flex-col items-center justify-center gap-4 py-16 text-center'>
+                      <motion.span
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 200, damping: 14, delay: 0.15 }}
+                        className='grid size-20 place-items-center rounded-full bg-primary text-primary-foreground'>
+                        <CheckIcon className='size-9' />
+                      </motion.span>
+                      <h3 className='font-display text-3xl font-medium text-foreground'>
+                        Message received.
+                      </h3>
+                      <p className='max-w-xs text-muted-foreground'>
+                        Thank you for reaching out. We&apos;ll get back to you within 2–3 business days.
+                      </p>
+                      <button
+                        className='mt-2 rounded-full border border-border px-6 py-3 text-sm font-semibold transition-colors hover:bg-muted'
+                        onClick={() => {
+                          setSubmitted(false);
+                          setForm(EMPTY_FORM);
+                        }}>
+                        Send another message
+                      </button>
+                    </motion.div>
+                  ) : (
+                    <motion.form
+                      key='form'
+                      exit={{ opacity: 0, y: -10 }}
+                      onSubmit={handleSubmit}
+                      className='space-y-6'>
+                      <div>
+                        <h3 className='font-display text-3xl font-medium text-foreground'>
+                          Send a message
+                        </h3>
+                        <p className='mt-1 text-sm text-muted-foreground'>
+                          Fill in the form below and we&apos;ll be in touch.
+                        </p>
+                      </div>
+
+                      <div className='grid gap-5 sm:grid-cols-2'>
+                        <div className='space-y-2'>
+                          <Label htmlFor='name'>Full Name *</Label>
+                          <Input id='name' name='name' placeholder='Your full name' value={form.name} onChange={handleChange} required />
+                        </div>
+                        <div className='space-y-2'>
+                          <Label htmlFor='email'>Email Address *</Label>
+                          <Input id='email' name='email' type='email' placeholder='you@example.com' value={form.email} onChange={handleChange} required />
+                        </div>
+                      </div>
+
+                      <div className='space-y-2'>
+                        <Label htmlFor='subject'>Subject *</Label>
+                        <Input id='subject' name='subject' placeholder='What is this about?' value={form.subject} onChange={handleChange} required />
+                      </div>
+
+                      <div className='space-y-2'>
+                        <Label htmlFor='message'>Message *</Label>
+                        <Textarea id='message' name='message' placeholder='Write your message here...' rows={6} value={form.message} onChange={handleChange} required />
+                      </div>
+
+                      <button
+                        type='submit'
+                        disabled={loading}
+                        className='group inline-flex h-14 w-full items-center justify-center gap-3 rounded-full bg-primary font-bold text-primary-foreground transition-colors duration-300 hover:bg-clay disabled:opacity-60 sm:w-auto sm:pr-2 sm:pl-8'>
+                        {loading ? (
+                          <>
+                            <span className='size-4 animate-spin rounded-full border-2 border-white/30 border-t-white' />
+                            Sending…
+                          </>
+                        ) : (
+                          <>
+                            Send message
+                            <span className='hidden size-10 place-items-center rounded-full bg-primary-foreground/15 transition-transform duration-500 group-hover:translate-x-1 sm:grid'>
+                              <SendIcon className='size-4' />
+                            </span>
+                          </>
+                        )}
+                      </button>
+                    </motion.form>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
-    </div>
+    </>
   );
 }

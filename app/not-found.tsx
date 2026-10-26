@@ -1,35 +1,46 @@
 import Link from "next/link";
-import { HomeIcon, ArrowLeftIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeftIcon, HomeIcon } from "lucide-react";
 import { Emblem } from "@/components/ui/Emblem";
+import { UliBand } from "@/components/ui/Ornaments";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
-      <div className="text-center max-w-md">
-        <Emblem size={80} className="text-primary mx-auto mb-6" />
-        <p className="font-sans text-7xl font-black text-primary/20 leading-none mb-2">404</p>
-        <h1 className="font-sans text-2xl font-bold text-foreground mb-3">Page Not Found</h1>
-        <p className="text-muted-foreground text-sm mb-8 leading-relaxed">
-          The page you are looking for does not exist or has been moved.
-          Let us take you back to the brotherhood.
+    <div className='noise relative flex min-h-svh items-center justify-center overflow-hidden bg-green-deep px-4 pt-24 pb-16'>
+      <div className='pattern-nsibidi mask-radial pointer-events-none absolute inset-0' />
+      <div className='pointer-events-none absolute -top-40 -right-40 size-[36rem] rounded-full bg-clay/25 blur-[140px]' />
+      <p
+        aria-hidden
+        className='font-display pointer-events-none absolute inset-0 grid place-items-center text-[38vw] leading-none font-semibold text-white/[0.04] italic select-none'>
+        404
+      </p>
+
+      <div className='relative z-10 max-w-lg text-center'>
+        <Emblem size={84} className='mx-auto mb-8 animate-float' />
+        <p className='eyebrow text-gold'>Page not found</p>
+        <h1 className='font-display mt-4 text-5xl leading-tight font-medium text-white sm:text-6xl'>
+          This path leads <em className='font-display-wonk text-gradient-warm'>nowhere.</em>
+        </h1>
+        <p className='mt-5 leading-relaxed text-white/60'>
+          The page you are looking for does not exist or has been moved. Let us take you
+          back to the brotherhood.
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button asChild className="bg-primary hover:bg-primary/90 gap-2">
-            <Link href="/">
-              <HomeIcon className="size-4" />
-              Go Home
-            </Link>
-          </Button>
-          <Button asChild variant="outline" className="gap-2">
-            <Link href="/works">
-              <ArrowLeftIcon className="size-4" />
-              View Our Works
-            </Link>
-          </Button>
+        <div className='mt-10 flex flex-col justify-center gap-3 sm:flex-row'>
+          <Link
+            href='/'
+            className='inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gold px-7 font-bold text-green-deep transition-colors hover:bg-gold-light'>
+            <HomeIcon className='size-4' />
+            Go home
+          </Link>
+          <Link
+            href='/works'
+            className='inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/25 px-7 font-semibold text-white transition-colors hover:bg-white/10'>
+            <ArrowLeftIcon className='size-4' />
+            View our works
+          </Link>
         </div>
-        <p className="mt-8 font-sans italic text-gold text-sm">"Ofu Obi Umunwanne"</p>
+        <p className='font-display mt-10 text-lg text-gold italic'>&ldquo;Ofu Obi Umunwanne&rdquo;</p>
       </div>
+      <UliBand className='absolute inset-x-0 bottom-0 text-gold/50' height={10} />
     </div>
   );
 }
