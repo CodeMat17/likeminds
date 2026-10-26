@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -15,9 +15,10 @@ import {
   XIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { PageHero } from "@/components/ui/PageHero";
 import { UliBand } from "@/components/ui/Ornaments";
+import { MemberAvatar } from "@/components/members/MemberAvatar";
 import { isExecutive, members, sortedMembers, type Member } from "@/lib/data/members";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +31,20 @@ const FILTERS = [
 ] as const;
 type FilterId = (typeof FILTERS)[number]["id"];
 
+// Bio sheet slides in from the right on desktop and up from the bottom on phones.
+const DESKTOP_QUERY = "(min-width: 640px)";
+function useIsDesktop() {
+  return useSyncExternalStore(
+    (cb) => {
+      const mql = window.matchMedia(DESKTOP_QUERY);
+      mql.addEventListener("change", cb);
+      return () => mql.removeEventListener("change", cb);
+    },
+    () => window.matchMedia(DESKTOP_QUERY).matches,
+    () => true,
+  );
+}
+
 // ─── Bio Sheet ───────────────────────────────────────────────────────────────
 function BioSheet({
   member,
@@ -41,38 +56,50 @@ function BioSheet({
   onOpenChange: (open: boolean) => void;
 }) {
   const phone = member?.social?.phone ?? member?.phone;
+  const isDesktop = useIsDesktop();
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        side='right'
+        side={isDesktop ? "right" : "bottom"}
         data-lenis-prevent
-        className='flex w-full flex-col gap-0 overflow-y-auto p-0 sm:w-[440px] sm:max-w-[440px]'>
+        className={cn(
+          "flex flex-col gap-0 overflow-y-auto overscroll-contain p-0",
+          isDesktop
+            ? "w-full sm:w-110 sm:max-w-110"
+            : "max-h-[92dvh] rounded-t-[2rem] border-0 pb-[env(safe-area-inset-bottom)]",
+        )}>
         {member && (
           <>
-            <div className='relative h-96 shrink-0'>
+            <div className='relative h-72 shrink-0 sm:h-96'>
               <Image
                 src={member.photo}
                 alt={member.name}
                 fill
                 className='object-cover object-top'
-                sizes='440px'
+                sizes='(min-width: 640px) 440px, 100vw'
               />
               <div className='absolute inset-0 bg-linear-to-t from-green-deep via-green-deep/20 to-transparent' />
-              <div className='absolute inset-x-0 bottom-0 p-6'>
+              {!isDesktop && (
+                <span aria-hidden className='absolute top-3 left-1/2 h-1.5 w-12 -translate-x-1/2 rounded-full bg-white/70' />
+              )}
+              <div className='absolute inset-x-0 bottom-0 p-5 sm:p-6'>
                 <span className='eyebrow inline-block rounded-full bg-gold px-3 py-1 text-[0.62rem] text-green-deep'>
                   {member.position}
                 </span>
                 <SheetHeader className='gap-0 p-0'>
-                  <SheetTitle className='font-display mt-3 text-left text-3xl leading-tight font-medium text-white'>
+                  <SheetTitle className='font-display mt-3 text-left text-2xl leading-tight font-medium text-white sm:text-3xl'>
                     {member.name}
                   </SheetTitle>
+                  <SheetDescription className='sr-only'>
+                    {member.position} — {member.occupation}
+                  </SheetDescription>
                 </SheetHeader>
               </div>
             </div>
             <UliBand className='text-gold/60' height={8} />
 
-            <div className='flex flex-1 flex-col gap-7 p-6'>
-              <div className='grid grid-cols-2 gap-4'>
+            <div className='flex flex-1 flex-col gap-7 p-5 sm:p-6'>
+              <div className='grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:gap-4'>
                 <Meta icon={BriefcaseIcon} label='Occupation' value={member.occupation} />
                 <Meta icon={MapPinIcon} label='Location' value={member.location} />
               </div>
@@ -176,6 +203,16 @@ export default function MembersPage() {
     );
   });
 
+  // Homepage portraits link here as /members?member=<id>; open that member's sheet.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("member");
+    const match = id && members.find((m) => m.id === id);
+    if (!match) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelected(match);
+    setSheetOpen(true);
+  }, []);
+
   function openBio(member: Member) {
     setSelected(member);
     setSheetOpen(true);
@@ -247,8 +284,9 @@ export default function MembersPage() {
       </section>
 
       {/* Grid */}
-      <section className='min-h-[60vh] bg-muted/40 py-14 sm:py-20'>
-        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <section className='relative min-h-[60vh] overflow-hidden bg-muted/50 py-14 sm:py-20'>
+        <div aria-hidden className='pattern-nsibidi mask-radial pointer-events-none absolute inset-0 opacity-60' />
+        <div className='relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
           {filtered.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -269,52 +307,42 @@ export default function MembersPage() {
               </Button>
             </motion.div>
           ) : (
-            <motion.div layout className='grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4'>
+            <motion.ul
+              layout
+              className='grid grid-cols-3 gap-x-3 gap-y-8 min-[480px]:grid-cols-4 sm:gap-x-6 sm:gap-y-10 md:grid-cols-5 lg:grid-cols-6'>
               <AnimatePresence mode='popLayout'>
                 {filtered.map((member, i) => (
-                  <motion.button
+                  <motion.li
                     layout
                     key={member.id}
-                    initial={{ opacity: 0, y: 30, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.94 }}
-                    transition={{ duration: 0.6, delay: Math.min(i, 12) * 0.035, ease: EASE }}
-                    onClick={() => openBio(member)}
-                    className='group text-left'>
-                    <div className='relative rounded-lg aspect-[3/4] overflow-hidden border border-border bg-card shadow-[0_20px_40px_-30px_oklch(0.22_0.05_155/50%)] transition-shadow duration-500 group-hover:shadow-[0_30px_60px_-25px_oklch(0.22_0.05_155/55%)]'>
-                      <Image
-                        src={member.photo}
-                        alt={member.name}
-                        fill
-                        sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
-                        className='object-cover object-top transition-transform duration-[1.2s] ease-out group-hover:scale-[1.06]'
+                    initial={{ opacity: 0, scale: 0.85, y: 16 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    transition={{ duration: 0.7, delay: Math.min(i, 18) * 0.03, ease: EASE }}>
+                    <button
+                      onClick={() => openBio(member)}
+                      aria-label={`View profile of ${member.name}, ${member.position}`}
+                      className='group block w-full text-center outline-none'>
+                      <MemberAvatar
+                        member={member}
+                        sizes='(min-width: 1024px) 160px, (min-width: 768px) 18vw, (min-width: 480px) 22vw, 30vw'
+                        className='mx-auto w-full max-w-36'
                       />
-                      <div className='absolute inset-0 bg-linear-to-t from-green-deep/85 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100' />
-                      {isExecutive(member) && (
-                        <span className='eyebrow absolute bottom-4 left-4 rounded-full bg-gold/95 px-3 py-1 text-[0.55rem] whitespace-nowrap text-green-deep shadow-lg'>
-                          Executive
-                        </span>
-                      )}
-                      <span className='absolute right-4 bottom-4 grid size-10 translate-y-3 place-items-center rounded-full bg-gold text-green-deep opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100'>
-                        <ArrowUpRightIcon className='size-4' />
-                      </span>
-                    </div>
-                    <div className='px-1 pt-4'>
-                      <p className='font-display text-lg leading-tight font-medium text-foreground transition-colors group-hover:text-primary'>
+                      <p className='font-display mt-3 line-clamp-2 text-[13px] leading-tight font-medium text-foreground transition-colors group-hover:text-primary sm:mt-4 sm:text-base'>
                         {member.name}
                       </p>
-                      <p className='mt-1 text-xs font-bold tracking-wider text-clay uppercase'>
+                      <p
+                        className={cn(
+                          "mt-1 line-clamp-1 text-[9px] font-bold tracking-wider uppercase sm:text-[11px]",
+                          isExecutive(member) ? "text-clay" : "text-muted-foreground",
+                        )}>
                         {member.position}
                       </p>
-                      <p className='mt-1.5 flex items-center gap-1 text-sm text-muted-foreground'>
-                        <MapPinIcon className='size-3.5 shrink-0' />
-                        <span className='truncate'>{member.location}</span>
-                      </p>
-                    </div>
-                  </motion.button>
+                    </button>
+                  </motion.li>
                 ))}
               </AnimatePresence>
-            </motion.div>
+            </motion.ul>
           )}
         </div>
       </section>
@@ -324,7 +352,10 @@ export default function MembersPage() {
         open={sheetOpen}
         onOpenChange={(open) => {
           setSheetOpen(open);
-          if (!open) setSelected(null);
+          if (!open) {
+            setSelected(null);
+            if (window.location.search) window.history.replaceState(null, "", window.location.pathname);
+          }
         }}
       />
     </>

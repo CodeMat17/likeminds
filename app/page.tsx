@@ -4,8 +4,11 @@ import { StatsSection } from "@/components/home/StatsSection";
 import { OriginSection } from "@/components/home/OriginSection";
 import { MissionSection } from "@/components/home/MissionSection";
 import { WorksPreview } from "@/components/home/WorksPreview";
-import { MembersPreview } from "@/components/home/MembersPreview";
+import { GalleryPreview } from "@/components/home/GalleryPreview";
 import { CTASection } from "@/components/home/CTASection";
+
+// Re-fetches the gallery preview; uploads also revalidate this page immediately.
+export const revalidate = 300;
 
 const BASE_URL = "https://likemindsofficial.org";
 
@@ -59,7 +62,7 @@ export default function HomePage() {
       <OriginSection />
       <MissionSection />
       <WorksPreview />
-      <MembersPreview />
+      <GalleryPreview />
       <CTASection />
     </>
   );

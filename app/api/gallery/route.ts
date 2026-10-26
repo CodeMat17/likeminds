@@ -52,11 +52,13 @@ export async function POST(req: NextRequest) {
         }
         await deleteGalleryPhoto(publicId);
         revalidatePath("/gallery");
+        revalidatePath("/");
         return NextResponse.json({ success: true });
       }
 
       case "revalidate":
         revalidatePath("/gallery");
+        revalidatePath("/");
         return NextResponse.json({ success: true });
 
       default:
